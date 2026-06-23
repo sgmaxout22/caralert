@@ -1,8 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Vehicle Owner Alert</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,7 +29,7 @@ padding:20px;
 
 .container{
 width:100%;
-max-width:500px;
+max-width:550px;
 }
 
 .card{
@@ -60,7 +62,7 @@ letter-spacing:2px;
 .car-model{
 margin-top:8px;
 font-size:16px;
-opacity:0.95;
+opacity:.95;
 }
 
 .content{
@@ -110,6 +112,11 @@ background:#22c55e;
 color:white;
 }
 
+.info{
+background:#3b82f6;
+color:white;
+}
+
 textarea{
 width:100%;
 height:120px;
@@ -120,6 +127,14 @@ margin-top:10px;
 resize:none;
 font-size:15px;
 outline:none;
+}
+
+input[type=file]{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:white;
+border-radius:15px;
 }
 
 .submit-btn{
@@ -133,6 +148,11 @@ color:white;
 font-size:17px;
 font-weight:600;
 cursor:pointer;
+}
+
+.submit-btn:disabled{
+opacity:.6;
+cursor:not-allowed;
 }
 
 .footer{
@@ -202,8 +222,16 @@ color:white;
 font-weight:600;
 }
 
+.loader{
+display:none;
+text-align:center;
+color:white;
+margin-top:15px;
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -221,7 +249,7 @@ MH05EV8508
 </div>
 
 <div class="car-model">
-Hyundai Verna (BlackPearl) 
+Hyundai Verna (Black Pearl)
 </div>
 </div>
 
@@ -232,24 +260,50 @@ Need to reach the vehicle owner?<br>
 Select a reason and send an instant alert.
 </div>
 
-<button class="option-btn wrong" onclick="selectReason(this,'Wrong Parking')">
+<button class="option-btn wrong"
+onclick="selectReason(this,'Wrong Parking')">
 🚫 Wrong Parking
 </button>
 
-<button class="option-btn remove" onclick="selectReason(this,'Remove Vehicle')">
+<button class="option-btn remove"
+onclick="selectReason(this,'Please Remove Vehicle')">
 🚘 Please Remove Vehicle
 </button>
 
-<button class="option-btn contact" onclick="selectReason(this,'Contact Owner')">
+<button class="option-btn contact"
+onclick="selectReason(this,'Contact Owner')">
 📞 Contact Owner
 </button>
 
-<textarea id="message"
+<button class="option-btn info"
+onclick="selectReason(this,'Vehicle Lights On')">
+💡 Vehicle Lights On
+</button>
+
+<button class="option-btn info"
+onclick="selectReason(this,'Emergency')">
+🚨 Emergency
+</button>
+
+<textarea
+id="message"
 placeholder="Describe the issue here..."></textarea>
 
-<button class="submit-btn" onclick="submitAlert()">
+<input
+type="file"
+id="photo"
+accept="image/*">
+
+<button
+id="sendBtn"
+class="submit-btn"
+onclick="submitAlert()">
 📨 Send Alert
 </button>
+
+<div id="loader" class="loader">
+Sending alert...
+</div>
 
 </div>
 
@@ -260,6 +314,7 @@ placeholder="Describe the issue here..."></textarea>
 </div>
 
 <!-- SUCCESS SCREEN -->
+
 <div id="successScreen" class="success-screen">
 
 <div class="success-icon">✓</div>
@@ -281,13 +336,13 @@ SG will contact you shortly.
 </div>
 
 <p>
-Thank you for taking the time to notify the vehicle owner. 🙏
+Thank you for taking the time to notify the vehicle owner.
 <br><br>
-✨ Your small action can make a big difference.
+Drive Safe • Stay Connected • Help Each Other ❤️
 </p>
 
 <div class="badge">
-Drive Safe • Stay Connected • Help Each Other ❤️
+Alert Delivered Successfully
 </div>
 
 </div>
@@ -298,12 +353,14 @@ Drive Safe • Stay Connected • Help Each Other ❤️
 
 <script>
 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxLeCmsdLJ5ojtxrYuhxXm7OtZ2c_fSLDl1s-iFIO8UIWM1UNN6-kVpzPKE-QaLnL6ctw/exec";
+
 let selectedReason = "";
 
 function selectReason(btn, reason){
 
-document.querySelectorAll(".option-btn").forEach(b=>{
-b.classList.remove("active");
+document.querySelectorAll(".option-btn").forEach(button=>{
+button.classList.remove("active");
 });
 
 btn.classList.add("active");
@@ -313,31 +370,76 @@ selectedReason = reason;
 
 function submitAlert(){
 
-if(selectedReason===""){
+if(selectedReason === ""){
 alert("Please select a reason.");
 return;
 }
 
+document.getElementById("sendBtn").disabled = true;
+document.getElementById("loader").style.display = "block";
+
+navigator.geolocation.getCurrentPosition(
+
+function(position){
+
+const payload = {
+
+vehicleNumber: "MH05EV8508",
+
+vehicleModel: "Hyundai Verna (Black Pearl)",
+
+reason: selectedReason,
+
+message: document.getElementById("message").value,
+
+latitude: position.coords.latitude,
+
+longitude: position.coords.longitude,
+
+location:
+`https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`,
+
+timestamp: new Date().toLocaleString()
+
+};
+
+fetch(SCRIPT_URL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(payload)
+})
+.then(response=>response.text())
+.then(data=>{
+
 document.getElementById("formScreen").style.display="none";
 document.getElementById("successScreen").style.display="block";
 
-/*
-INTEGRATE HERE:
+})
+.catch(error=>{
 
-1. Telegram API
-2. WhatsApp API
-3. Google Apps Script
-4. GPS Location
-5. Photo Upload
-6. Google Sheet Logging
+alert("Unable to send alert. Please try again.");
 
-Example data:
+document.getElementById("sendBtn").disabled = false;
+document.getElementById("loader").style.display = "none";
 
-selectedReason
-document.getElementById("message").value
-Date.now()
+console.log(error);
 
-*/
+});
+
+},
+
+function(){
+
+alert("Please allow location access to send alert.");
+
+document.getElementById("sendBtn").disabled = false;
+document.getElementById("loader").style.display = "none";
+
+}
+
+);
 
 }
 
@@ -345,3 +447,4 @@ Date.now()
 
 </body>
 </html>
+```
