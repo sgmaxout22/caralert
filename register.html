@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Car Alert Registration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+padding:20px;
+}
+
+.card{
+width:100%;
+max-width:500px;
+background:#fff;
+border-radius:25px;
+padding:35px;
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
+}
+
+.logo{
+font-size:70px;
+text-align:center;
+margin-bottom:10px;
+}
+
+h1{
+text-align:center;
+color:#111827;
+margin-bottom:8px;
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+margin-bottom:30px;
+font-size:14px;
+}
+
+label{
+display:block;
+margin-bottom:8px;
+font-weight:600;
+color:#374151;
+}
+
+input{
+width:100%;
+padding:15px;
+border:2px solid #e5e7eb;
+border-radius:12px;
+font-size:16px;
+margin-bottom:20px;
+transition:.3s;
+}
+
+input:focus{
+outline:none;
+border-color:#0088cc;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:12px;
+background:#0088cc;
+color:white;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.loader{
+display:none;
+text-align:center;
+margin-top:15px;
+font-weight:600;
+color:#0088cc;
+}
+
+.success{
+display:none;
+text-align:center;
+}
+
+.success h2{
+color:#16a34a;
+margin-bottom:15px;
+}
+
+.success p{
+color:#4b5563;
+line-height:1.6;
+}
+
+.footer{
+margin-top:20px;
+text-align:center;
+font-size:12px;
+color:#9ca3af;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div id="formArea">
+
+<div class="logo">🚗</div>
+
+<h1>Car Alert Registration</h1>
+
+<p class="sub">
+Register your vehicle to receive vehicle assistance notifications.
+</p>
+
+<label>Vehicle Number</label> <input
+type="text"
+id="vehicleNo"
+placeholder="MH46AB1234">
+
+<label>Owner Name</label> <input
+type="text"
+id="ownerName"
+placeholder="Enter Your Name">
+
+<label>Mobile Number</label> <input
+type="tel"
+id="mobileNo"
+placeholder="Enter Mobile Number"
+maxlength="10">
+
+<button onclick="registerVehicle()">
+🚀 Register Vehicle
+</button>
+
+<div class="loader" id="loader">
+Saving Registration...
+</div>
+
+</div>
+
+<div class="success" id="success">
+
+<h2>✅ Registration Successful</h2>
+
+<p>
+Thank you for registering your vehicle.
+</p>
+
+<br>
+
+<p>
+📞 We will contact you shortly for further setup and Telegram integration.
+</p>
+
+</div>
+
+<div class="footer">
+Car Alert Registration System
+</div>
+
+</div>
+
+<script>
+
+async function registerVehicle(){
+
+const vehicleNo =
+document.getElementById("vehicleNo")
+.value
+.trim()
+.toUpperCase();
+
+const ownerName =
+document.getElementById("ownerName")
+.value
+.trim();
+
+const mobileNo =
+document.getElementById("mobileNo")
+.value
+.trim();
+
+if(!vehicleNo || !ownerName || !mobileNo){
+
+alert("Please fill all details");
+return;
+
+}
+
+if(mobileNo.length != 10){
+
+alert("Please enter a valid 10 digit mobile number");
+return;
+
+}
+
+document.getElementById("loader").style.display="block";
+
+const WEB_APP_URL =
+"PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEBAPP_URL_HERE";
+
+try{
+
+const response = await fetch(WEB_APP_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+vehicleNo:vehicleNo,
+ownerName:ownerName,
+mobileNo:mobileNo
+
+})
+
+});
+
+const result = await response.json();
+
+document.getElementById("loader").style.display="none";
+
+if(result.success){
+
+document.getElementById("formArea").style.display="none";
+document.getElementById("success").style.display="block";
+
+}else{
+
+alert("Failed to save registration.");
+
+}
+
+}catch(error){
+
+document.getElementById("loader").style.display="none";
+
+alert("Connection Error");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
