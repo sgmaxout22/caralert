@@ -359,12 +359,21 @@ function submitAlert(){
       .then(response => response.text())
       .then(result => {
 
-        console.log(result);
+    document.getElementById("formScreen").style.display = "none";
+    document.getElementById("successScreen").style.display = "block";
 
-        document.getElementById("formScreen").style.display = "none";
-        document.getElementById("successScreen").style.display = "block";
+    // Close page after 5 seconds
+    setTimeout(function(){
 
-      })
+        // Try to close tab/window
+        window.close();
+
+        // Fallback for mobile browsers
+        window.location.href = "about:blank";
+
+    }, 5000);
+
+})
       .catch(error => {
 
         console.error(error);
