@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -30,7 +29,7 @@ padding:20px;
 .card{
 width:100%;
 max-width:500px;
-background:#fff;
+background:white;
 border-radius:25px;
 padding:35px;
 box-shadow:0 20px 50px rgba(0,0,0,0.25);
@@ -69,7 +68,6 @@ border:2px solid #e5e7eb;
 border-radius:12px;
 font-size:16px;
 margin-bottom:20px;
-transition:.3s;
 }
 
 input:focus{
@@ -116,14 +114,6 @@ margin-bottom:15px;
 color:#4b5563;
 line-height:1.6;
 }
-
-.footer{
-margin-top:20px;
-text-align:center;
-font-size:12px;
-color:#9ca3af;
-}
-
 </style>
 
 </head>
@@ -139,7 +129,7 @@ color:#9ca3af;
 <h1>Car Alert Registration</h1>
 
 <p class="sub">
-Register your vehicle to receive vehicle assistance notifications.
+Register your vehicle and connect your Telegram account.
 </p>
 
 <label>Vehicle Number</label> <input
@@ -159,7 +149,7 @@ placeholder="Enter Mobile Number"
 maxlength="10">
 
 <button onclick="registerVehicle()">
-🚀 Register Vehicle
+📲 Register & Connect Telegram
 </button>
 
 <div class="loader" id="loader">
@@ -173,19 +163,15 @@ Saving Registration...
 <h2>✅ Registration Successful</h2>
 
 <p>
-Thank you for register.
+Your details have been saved successfully.
 </p>
 
 <br>
 
 <p>
-📞 We will contact you shortly for further setup and Telegram integration.
+Opening Telegram Bot...
 </p>
 
-</div>
-
-<div class="footer">
-Car Alert Registration System
 </div>
 
 </div>
@@ -195,20 +181,13 @@ Car Alert Registration System
 async function registerVehicle(){
 
 const vehicleNo =
-document.getElementById("vehicleNo")
-.value
-.trim()
-.toUpperCase();
+document.getElementById("vehicleNo").value.trim().toUpperCase();
 
 const ownerName =
-document.getElementById("ownerName")
-.value
-.trim();
+document.getElementById("ownerName").value.trim();
 
 const mobileNo =
-document.getElementById("mobileNo")
-.value
-.trim();
+document.getElementById("mobileNo").value.trim();
 
 if(!vehicleNo || !ownerName || !mobileNo){
 
@@ -217,15 +196,16 @@ return;
 
 }
 
-if(mobileNo.length != 10){
+if(mobileNo.length !== 10){
 
 alert("Please enter a valid 10 digit mobile number");
 return;
 
 }
 
-document.getElementById("loader").style.display="block";
+document.getElementById("loader").style.display = "block";
 
+/* REPLACE WITH YOUR APPS SCRIPT WEB APP URL */
 const WEB_APP_URL =
 "https://script.google.com/macros/s/AKfycbz-NuomVLKsXRJesFjxPQ4_YP7uZdtm8sZZrp-0-QJ4jb3fzyl-pwma1KMPAbzfathUPg/exec";
 
@@ -251,12 +231,20 @@ mobileNo:mobileNo
 
 const result = await response.json();
 
-document.getElementById("loader").style.display="none";
+document.getElementById("loader").style.display = "none";
 
 if(result.success){
 
-document.getElementById("formArea").style.display="none";
-document.getElementById("success").style.display="block";
+document.getElementById("formArea").style.display = "none";
+document.getElementById("success").style.display = "block";
+
+setTimeout(function(){
+
+window.location.href =
+"https://t.me/sg_car_alert_bot?start=" +
+encodeURIComponent(vehicleNo);
+
+},2000);
 
 }else{
 
@@ -266,9 +254,9 @@ alert("Failed to save registration.");
 
 }catch(error){
 
-document.getElementById("loader").style.display="none";
+document.getElementById("loader").style.display = "none";
 
-alert("Connection Error");
+alert("Unable to connect to server.");
 
 }
 
