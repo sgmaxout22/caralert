@@ -1,62 +1,81 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SG VERNA</title>
-</head>
-
-<body>
-
-<h2>🚗 SG VERNA </h2>
-
-<button onclick="sendAlert('Wrong Parking')">
-🚫 Wrong Parking
-</button>
-
-<br><br>
-
-<button onclick="sendAlert('Please Move Vehicle')">
-🚗 Remove Car
-</button>
-
-<br><br>
-
-<button onclick="sendAlert('Contact Owner')">
-📞 Contact Owner
-</button>
-
-<br><br>
-
-<textarea id="msg"
-placeholder="Message"></textarea>
-
 <script>
 
-function sendAlert(type){
+let selectedReason = "";
 
- navigator.geolocation.getCurrentPosition(pos => {
+function selectReason(btn, reason) {
 
-   const payload = {
-      alert:type,
-      location:
-      `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`,
-      message:
-      document.getElementById('msg').value
-   };
+  document.querySelectorAll(".option-btn").forEach(b => {
+    b.classList.remove("active");
+  });
 
-   fetch(
-   'https://script.google.com/macros/s/AKfycbxRw4lcW3rpI6-ddOR_D2Df3bse90ww3U9O9jw2u23c-4de93lsGMiHeO3rVt-AVv08_A/exec',
-   {
-      method:'POST',
-      body:JSON.stringify(payload)
-   });
+  btn.classList.add("active");
+  selectedReason = reason;
+}
 
-   alert("Alert Sent");
- });
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbxK7eqi2PzL4j0xrsCAxw-ryQE7nNoQBaLd6i6BLIR9BT8sG3LySMm-QKt4Ejz03eJTdA/exec";
 
+function submitAlert() {
+
+  if (selectedReason === "") {
+    alert("Please select a reason.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(pos) {
+
+      const payload = {
+        action: "alert",
+        alert: selectedReason,
+        message: document.getElementById("message").value,
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        location:
+          `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`,
+        timestamp: new Date().toLocaleString()
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.text())
+      .then(result => {
+
+        console.log(result);
+
+        document.getElementById("formScreen").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
+
+        setTimeout(() => {
+
+          try {
+            window.close();
+          } catch(e) {}
+
+          window.location.replace("about:blank");
+
+        }, 5000);
+
+      })
+      .catch(error => {
+
+        console.error(error);
+        alert("Unable to send alert.");
+
+      });
+
+    },
+
+    function(error) {
+
+      alert("Location permission is required.");
+
+    }
+
+  );
 }
 
 </script>
-
-</body>
-</html>
