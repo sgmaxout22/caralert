@@ -302,66 +302,88 @@ let selectedReason = "";
 
 function selectReason(btn, reason){
 
-document.querySelectorAll(".option-btn").forEach(b=>{
-b.classList.remove("active");
-});
+  document.querySelectorAll(".option-btn").forEach(b=>{
+    b.classList.remove("active");
+  });
 
-btn.classList.add("active");
-selectedReason = reason;
-
+  btn.classList.add("active");
+  selectedReason = reason;
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyB8wA2HCHQagWBVbLbsJLuaxgNpfmZDufycR20kag5dpqWzD_R8-mhkK1-uragqLHXHw/exec";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbyB8wA2HCHQagWBVbLbsJLuaxgNpfmZDufycR20kag5dpqWzD_R8-mhkK1-uragqLHXHw/exec";
 
 function submitAlert(){
 
-    if(selectedReason===""){
-        alert("Please select a reason.");
-        return;
+  if(selectedReason === ""){
+    alert("Please select a reason.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(pos){
+
+      const formData = new FormData();
+
+      formData.append("alert", selectedReason);
+      formData.append(
+        "message",
+        document.getElementById("message").value
+      );
+
+      formData.append(
+        "latitude",
+        pos.coords.latitude
+      );
+
+      formData.append(
+        "longitude",
+        pos.coords.longitude
+      );
+
+      formData.append(
+        "location",
+        `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+      );
+
+      formData.append(
+        "timestamp",
+        new Date().toLocaleString()
+      );
+
+      fetch(SCRIPT_URL,{
+        method:"POST",
+        body:formData
+      })
+      .then(response => response.text())
+      .then(result => {
+
+        console.log(result);
+
+        document.getElementById("formScreen").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
+
+      })
+      .catch(error => {
+
+        console.error(error);
+        alert("Unable to send alert.");
+
+      });
+
+    },
+
+    function(error){
+
+      alert("Location permission is required.");
+
     }
 
-    navigator.geolocation.getCurrentPosition(
-
-        function(pos){
-
-            const data = {
-                alert: selectedReason,
-                message: document.getElementById("message").value,
-                latitude: pos.coords.latitude,
-                longitude: pos.coords.longitude,
-                location:
-                `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`,
-                timestamp: new Date().toLocaleString()
-            };
-
-            fetch(SCRIPT_URL,{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(data)
-            })
-            .then(response=>response.text())
-            .then(result=>{
-
-                document.getElementById("formScreen").style.display="none";
-                document.getElementById("successScreen").style.display="block";
-
-            })
-            .catch(error=>{
-                alert("Unable to send alert.");
-                console.log(error);
-            });
-
-        },
-
-        function(){
-            alert("Location permission is required.");
-        }
-
-    );
+  );
 
 }
+
 </script>
 
 </body>
