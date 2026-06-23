@@ -1,10 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Owner Alert</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.container{
+width:100%;
+max-width:500px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.15);
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,0.35);
+}
+
+.header{
+text-align:center;
+padding:35px 20px;
+background:linear-gradient(135deg,#2563eb,#06b6d4);
+color:white;
+}
+
+.car-icon{
+font-size:60px;
+margin-bottom:10px;
+}
+
+.car-number{
+font-size:32px;
+font-weight:700;
+letter-spacing:2px;
+}
+
+.car-model{
+margin-top:8px;
+font-size:16px;
+opacity:0.95;
+}
+
+.content{
+padding:25px;
+color:white;
+}
+
+.notice{
+text-align:center;
+margin-bottom:20px;
+line-height:1.6;
+color:#e2e8f0;
+}
+
+.option-btn{
+width:100%;
+padding:16px;
+margin-bottom:12px;
+border:none;
+border-radius:15px;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.option-btn:hover{
+transform:translateY(-2px);
+}
+
+.active{
+border:3px solid white;
+}
+
+.wrong{
+background:#ef4444;
+color:white;
+}
+
+.remove{
+background:#f59e0b;
+color:white;
+}
+
+.contact{
+background:#22c55e;
+color:white;
+}
+
+textarea{
+width:100%;
+height:120px;
+border:none;
+border-radius:15px;
+padding:15px;
+margin-top:10px;
+resize:none;
+font-size:15px;
+outline:none;
+}
+
+.submit-btn{
+width:100%;
+padding:16px;
+margin-top:15px;
+border:none;
+border-radius:15px;
+background:#2563eb;
+color:white;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+}
+
+.footer{
+padding:15px;
+text-align:center;
+color:#94a3b8;
+font-size:12px;
+}
+
+.success-screen{
+display:none;
+padding:40px 25px;
+text-align:center;
+}
+
+.success-icon{
+width:100px;
+height:100px;
+margin:auto;
+border-radius:50%;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:50px;
+color:white;
+margin-bottom:25px;
+}
+
+.success-screen h1{
+color:white;
+margin-bottom:15px;
+}
+
+.success-screen p{
+color:#e2e8f0;
+line-height:1.8;
+}
+
+.status-box{
+margin:25px 0;
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:15px;
+text-align:left;
+}
+
+.status-box div{
+margin:10px 0;
+color:white;
+}
+
+.highlight{
+font-size:22px;
+font-weight:700;
+color:#22c55e;
+margin:20px 0;
+}
+
+.badge{
+display:inline-block;
+margin-top:20px;
+padding:12px 20px;
+border-radius:30px;
+background:linear-gradient(135deg,#2563eb,#06b6d4);
+color:white;
+font-weight:600;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<!-- FORM SCREEN -->
+<div id="formScreen">
+
+<div class="header">
+<div class="car-icon">🚘</div>
+
+<div class="car-number">
+MH05EV8508
+</div>
+
+<div class="car-model">
+Hyundai Verna (BlackPearl) 
+</div>
+</div>
+
+<div class="content">
+
+<div class="notice">
+Need to reach the vehicle owner?<br>
+Select a reason and send an instant alert.
+</div>
+
+<button class="option-btn wrong" onclick="selectReason(this,'Wrong Parking')">
+🚫 Wrong Parking
+</button>
+
+<button class="option-btn remove" onclick="selectReason(this,'Remove Vehicle')">
+🚘 Please Remove Vehicle
+</button>
+
+<button class="option-btn contact" onclick="selectReason(this,'Contact Owner')">
+📞 Contact Owner
+</button>
+
+<textarea id="message"
+placeholder="Describe the issue here..."></textarea>
+placeholder="Describe the issue here or mention your number to get call back..."></textarea>
+
+<button class="submit-btn" onclick="submitAlert()">
+📨 Send Alert
+</button>
+
+</div>
+
+<div class="footer">
+🔒 Owner's phone number remains private
+</div>
+
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div id="successScreen" class="success-screen">
+
+<div class="success-icon">✓</div>
+
+<h1>🚗 Thank You!</h1>
+
+<p>
+Your message has been successfully delivered to <strong>SG</strong>.
+</p>
+
+<div class="status-box">
+<div>📨 Alert Received</div>
+<div>📍 Location Shared</div>
+<div>🕒 Timestamp Recorded</div>
+</div>
+
+<div class="highlight">
+SG will contact you shortly.
+</div>
+
+<p>
+Thank you for taking the time to notify the vehicle owner. 🙏
+<br><br>
+✨ Your small action can make a big difference.
+</p>
+
+<div class="badge">
+Drive Safe • Stay Connected • Help Each Other ❤️
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
 
 let selectedReason = "";
 
-function selectReason(btn, reason) {
+function selectReason(btn, reason){
 
-  document.querySelectorAll(".option-btn").forEach(b => {
+  document.querySelectorAll(".option-btn").forEach(b=>{
     b.classList.remove("active");
   });
 
@@ -13,53 +312,69 @@ function selectReason(btn, reason) {
 }
 
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbwu-HUm_Pcwb9-t0f9rqNOF7xGTfH2DC8Fe7JCgbg5SKLZK3ino7xNNRvBcoF__vpugWw/exec";
+"https://script.google.com/macros/s/AKfycbyBzMY1o22EaMRfmXrCCpgVQeygW4D9o0QRg8NmuzUOC8pBilj5cnd7lJiZD91BxA4P/exec";
 
-function submitAlert() {
+function submitAlert(){
 
-  if (selectedReason === "") {
+  if(selectedReason === ""){
     alert("Please select a reason.");
     return;
   }
 
   navigator.geolocation.getCurrentPosition(
 
-    function(pos) {
+    function(pos){
 
-      const payload = {
-        action: "alert",
-        alert: selectedReason,
-        message: document.getElementById("message").value,
-        latitude: pos.coords.latitude,
-        longitude: pos.coords.longitude,
-        location:
-          `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`,
-        timestamp: new Date().toLocaleString()
-      };
+      const formData = new FormData();
 
-      fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
+      formData.append("alert", selectedReason);
+      formData.append(
+        "message",
+        document.getElementById("message").value
+      );
+
+      formData.append(
+        "latitude",
+        pos.coords.latitude
+      );
+
+      formData.append(
+        "longitude",
+        pos.coords.longitude
+      );
+
+      formData.append(
+        "location",
+        `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+      );
+
+      formData.append(
+        "timestamp",
+        new Date().toLocaleString()
+      );
+
+      fetch(SCRIPT_URL,{
+        method:"POST",
+        body:formData
       })
       .then(response => response.text())
       .then(result => {
 
-        console.log(result);
+    document.getElementById("formScreen").style.display = "none";
+    document.getElementById("successScreen").style.display = "block";
 
-        document.getElementById("formScreen").style.display = "none";
-        document.getElementById("successScreen").style.display = "block";
+    // Close page after 5 seconds
+    setTimeout(function(){
 
-        setTimeout(() => {
+        // Try to close tab/window
+        window.close();
 
-          try {
-            window.close();
-          } catch(e) {}
+        // Fallback for mobile browsers
+        window.location.href = "about:blank";
 
-          window.location.replace("about:blank");
+    }, 5000);
 
-        }, 5000);
-
-      })
+})
       .catch(error => {
 
         console.error(error);
@@ -69,13 +384,17 @@ function submitAlert() {
 
     },
 
-    function(error) {
+    function(error){
 
       alert("Location permission is required.");
 
     }
 
   );
+
 }
 
 </script>
+
+</body>
+</html>
