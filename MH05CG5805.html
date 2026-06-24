@@ -303,65 +303,51 @@ Drive Safe • Stay Connected • Help Each Other ❤️
 
 let selectedReason = "";
 
-/* ======================================
-   GET VEHICLE NUMBER FROM URL
-   Example:
-   https://sgmaxout22.github.io/caralert/MH05CG5805
-====================================== */
+/* ==============================
+   FIXED VEHICLE NUMBER
+============================== */
 
-const pathParts = window.location.pathname.split("/");
-const vehicleNumber =
-  pathParts[pathParts.length - 1]
-  .trim()
-  .toUpperCase() || "UNKNOWN";
+const vehicleNumber = "MH05CG5805";
 
-/* ======================================
-   SHOW VEHICLE NUMBER ON PAGE
-====================================== */
+/* ==============================
+   SHOW VEHICLE NUMBER
+============================== */
 
 window.onload = function () {
 
-  const vehicleElement =
-    document.querySelector(".car-number");
-
-  if (vehicleElement) {
-    vehicleElement.innerText =
-      vehicleNumber;
-  }
+  document.querySelector(".car-number").innerText =
+    vehicleNumber;
 
 };
 
-/* ======================================
+/* ==============================
    REASON SELECT
-====================================== */
+============================== */
 
 function selectReason(btn, reason){
 
-  document
-    .querySelectorAll(".option-btn")
-    .forEach(b => {
-      b.classList.remove("active");
-    });
+  document.querySelectorAll(".option-btn")
+  .forEach(b => b.classList.remove("active"));
 
   btn.classList.add("active");
 
   selectedReason = reason;
 }
 
-/* ======================================
+/* ==============================
    APPS SCRIPT URL
-====================================== */
+============================== */
 
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwKNSpCzm1Ked2eZOeDjC-5aOcvr2nt_y-fYm6XYg8jxNtXrClEVLRviAUl2IZiixrS8w/exec";
 
-/* ======================================
-   SUBMIT ALERT
-====================================== */
+/* ==============================
+   SEND ALERT
+============================== */
 
 function submitAlert(){
 
-  if(selectedReason === ""){
+  if(!selectedReason){
 
     alert("Please select a reason.");
 
@@ -372,47 +358,38 @@ function submitAlert(){
 
     function(pos){
 
-      const formData =
-        new FormData();
+      const formData = new FormData();
 
-      // Date
       formData.append(
         "date",
-        new Date()
-        .toLocaleDateString("en-GB")
+        new Date().toLocaleDateString("en-GB")
       );
 
-      // Vehicle Number
       formData.append(
         "vehicleNumber",
         vehicleNumber
       );
 
-      // Alert
       formData.append(
         "alert",
         selectedReason
       );
 
-      // Message
       formData.append(
         "message",
         document.getElementById("message").value
       );
 
-      // Latitude
       formData.append(
         "latitude",
         pos.coords.latitude
       );
 
-      // Longitude
       formData.append(
         "longitude",
         pos.coords.longitude
       );
 
-      // Maps Link
       formData.append(
         "location",
         "https://maps.google.com/?q=" +
@@ -421,24 +398,19 @@ function submitAlert(){
         pos.coords.longitude
       );
 
-      // Timestamp
       formData.append(
         "timestamp",
-        new Date()
-        .toLocaleString("en-GB")
+        new Date().toLocaleString("en-GB")
       );
 
-      fetch(
-        SCRIPT_URL,
-        {
-          method: "POST",
-          body: formData
-        }
-      )
+      console.log("Vehicle:", vehicleNumber);
 
-      .then(response =>
-        response.text()
-      )
+      fetch(SCRIPT_URL,{
+        method:"POST",
+        body:formData
+      })
+
+      .then(response => response.text())
 
       .then(result => {
 
@@ -451,17 +423,6 @@ function submitAlert(){
         document.getElementById(
           "successScreen"
         ).style.display = "block";
-
-        setTimeout(function(){
-
-          try{
-            window.close();
-          }catch(e){}
-
-          window.location.href =
-            "about:blank";
-
-        },5000);
 
       })
 
@@ -477,7 +438,7 @@ function submitAlert(){
 
     },
 
-    function(error){
+    function(){
 
       alert(
         "Location permission is required."
