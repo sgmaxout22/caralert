@@ -301,38 +301,68 @@ Drive Safe • Stay Connected • Help Each Other ❤️
 
 let selectedReason = "";
 
-// Vehicle Number from URL
-const urlParams = new URLSearchParams(window.location.search);
-const vehicleNumber = urlParams.get("vehicle") || "UNKNOWN";
+/* ======================================
+   GET VEHICLE NUMBER FROM URL
+   Example:
+   https://sgmaxout22.github.io/caralert/MH05CG5805
+====================================== */
 
-// Show vehicle number on page
+const pathParts = window.location.pathname.split("/");
+const vehicleNumber =
+  pathParts[pathParts.length - 1]
+  .trim()
+  .toUpperCase() || "UNKNOWN";
+
+/* ======================================
+   SHOW VEHICLE NUMBER ON PAGE
+====================================== */
+
 window.onload = function () {
 
-  const vehicleElement = document.querySelector(".car-number");
+  const vehicleElement =
+    document.querySelector(".car-number");
 
-  if(vehicleElement){
-    vehicleElement.innerText = vehicleNumber;
+  if (vehicleElement) {
+    vehicleElement.innerText =
+      vehicleNumber;
   }
 
 };
 
+/* ======================================
+   REASON SELECT
+====================================== */
+
 function selectReason(btn, reason){
 
-  document.querySelectorAll(".option-btn").forEach(b=>{
-    b.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".option-btn")
+    .forEach(b => {
+      b.classList.remove("active");
+    });
 
   btn.classList.add("active");
+
   selectedReason = reason;
 }
+
+/* ======================================
+   APPS SCRIPT URL
+====================================== */
 
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbwj9yitmzxJWjh6-C966_eXwMMro6bFcRDZsylBXW0fY5WJddWmVXjjCfhFza2_c6jPNg/exec";
 
+/* ======================================
+   SUBMIT ALERT
+====================================== */
+
 function submitAlert(){
 
   if(selectedReason === ""){
+
     alert("Please select a reason.");
+
     return;
   }
 
@@ -340,12 +370,14 @@ function submitAlert(){
 
     function(pos){
 
-      const formData = new FormData();
+      const formData =
+        new FormData();
 
       // Date
       formData.append(
         "date",
-        new Date().toLocaleDateString()
+        new Date()
+        .toLocaleDateString("en-GB")
       );
 
       // Vehicle Number
@@ -378,34 +410,54 @@ function submitAlert(){
         pos.coords.longitude
       );
 
-      // Google Maps Location
+      // Maps Link
       formData.append(
         "location",
-        `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+        "https://maps.google.com/?q=" +
+        pos.coords.latitude +
+        "," +
+        pos.coords.longitude
       );
 
       // Timestamp
       formData.append(
         "timestamp",
-        new Date().toLocaleString()
+        new Date()
+        .toLocaleString("en-GB")
       );
 
-      fetch(SCRIPT_URL,{
-        method:"POST",
-        body:formData
-      })
+      fetch(
+        SCRIPT_URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      )
 
-      .then(response => response.text())
+      .then(response =>
+        response.text()
+      )
 
       .then(result => {
 
-        document.getElementById("formScreen").style.display = "none";
-        document.getElementById("successScreen").style.display = "block";
+        console.log(result);
+
+        document.getElementById(
+          "formScreen"
+        ).style.display = "none";
+
+        document.getElementById(
+          "successScreen"
+        ).style.display = "block";
 
         setTimeout(function(){
 
-          window.close();
-          window.location.href = "about:blank";
+          try{
+            window.close();
+          }catch(e){}
+
+          window.location.href =
+            "about:blank";
 
         },5000);
 
@@ -414,7 +466,10 @@ function submitAlert(){
       .catch(error => {
 
         console.error(error);
-        alert("Unable to send alert.");
+
+        alert(
+          "Unable to send alert."
+        );
 
       });
 
@@ -422,8 +477,16 @@ function submitAlert(){
 
     function(error){
 
-      alert("Location permission is required.");
+      alert(
+        "Location permission is required."
+      );
 
+    },
+
+    {
+      enableHighAccuracy:true,
+      timeout:15000,
+      maximumAge:0
     }
 
   );
@@ -431,6 +494,7 @@ function submitAlert(){
 }
 
 </script>
+
 
 
 </body>
