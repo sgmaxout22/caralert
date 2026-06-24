@@ -178,7 +178,7 @@ Opening Telegram Bot...
 
 <script>
 
-async function registerVehicle(){
+function registerVehicle(){
 
 const vehicleNo =
 document.getElementById("vehicleNo").value.trim().toUpperCase();
@@ -196,7 +196,7 @@ return;
 
 }
 
-if(mobileNo.length !== 10){
+if(!/^\d{10}$/.test(mobileNo)){
 
 alert("Please enter a valid 10 digit mobile number");
 return;
@@ -205,39 +205,44 @@ return;
 
 document.getElementById("loader").style.display = "block";
 
-/* REPLACE WITH YOUR APPS SCRIPT WEB APP URL */
-const WEB_APP_URL =
+const form = document.createElement("form");
+
+form.method = "POST";
+
+form.action =
 "https://script.google.com/macros/s/AKfycbwQGTLj7jQrtQyj6YK1GyBqB1zJR1mMPpR8pHjFruf5zJGOr9WcJdtklGH4jk_nSlb3NA/exec";
 
-try{
+form.target = "hiddenFrame";
 
-const response = await fetch(WEB_APP_URL,{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
+const fields = {
 action:"register",
-
 vehicleNo:vehicleNo,
 ownerName:ownerName,
 mobileNo:mobileNo
+};
 
-})
+for(const key in fields){
 
-});
+const input = document.createElement("input");
 
-const result = await response.json();
+input.type = "hidden";
+input.name = key;
+input.value = fields[key];
+
+form.appendChild(input);
+
+}
+
+document.body.appendChild(form);
+
+form.submit();
+
+setTimeout(function(){
 
 document.getElementById("loader").style.display = "none";
 
-if(result.success){
-
 document.getElementById("formArea").style.display = "none";
+
 document.getElementById("success").style.display = "block";
 
 setTimeout(function(){
@@ -248,21 +253,17 @@ encodeURIComponent(vehicleNo);
 
 },2000);
 
-}else{
-
-alert("Failed to save registration.");
+},1500);
 
 }
 
-}catch(error){
+</script>
 
-document.getElementById("loader").style.display = "none";
+<iframe
+name="hiddenFrame"
+style="display:none;">
+</iframe>
 
-alert("Unable to connect to server.");
-
-}
-
-}
 
 </script>
 
