@@ -303,7 +303,7 @@ let selectedReason = "";
 
 function selectReason(btn, reason){
 
-  document.querySelectorAll(".option-btn").forEach(b=>{
+  document.querySelectorAll(".option-btn").forEach(b => {
     b.classList.remove("active");
   });
 
@@ -315,7 +315,6 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbzE-shX_YR_HnOjAcVL0HUMk2JETDTS1RB2oSVCKU5WPOX0PxrLsmPXBo2TQvqFwp3IEg/exec";
 
 function submitAlert(){
-  formData.append("vehicleNo", "MH05CG5805");
 
   if(selectedReason === ""){
     alert("Please select a reason.");
@@ -328,10 +327,23 @@ function submitAlert(){
 
       const formData = new FormData();
 
-      formData.append("alert", selectedReason);
+      // Get vehicle number from page
+      const vehicleNo = document
+        .querySelector(".car-number")
+        .innerText
+        .trim()
+        .toUpperCase();
+
+      formData.append("vehicleNo", vehicleNo);
+
+      formData.append(
+        "alert",
+        selectedReason
+      );
+
       formData.append(
         "message",
-        document.getElementById("message").value
+        document.getElementById("message").value.trim()
       );
 
       formData.append(
@@ -354,28 +366,29 @@ function submitAlert(){
         new Date().toLocaleString()
       );
 
-      fetch(SCRIPT_URL,{
-        method:"POST",
-        body:formData
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
       })
       .then(response => response.text())
       .then(result => {
 
-    document.getElementById("formScreen").style.display = "none";
-    document.getElementById("successScreen").style.display = "block";
+        console.log("Server Response:", result);
 
-    // Close page after 5 seconds
-    setTimeout(function(){
+        document.getElementById("formScreen").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
 
-        // Try to close tab/window
-        window.close();
+        setTimeout(function(){
 
-        // Fallback for mobile browsers
-        window.location.href = "about:blank";
+          try {
+            window.close();
+          } catch(e){}
 
-    }, 5000);
+          window.location.replace("about:blank");
 
-})
+        }, 5000);
+
+      })
       .catch(error => {
 
         console.error(error);
@@ -387,8 +400,18 @@ function submitAlert(){
 
     function(error){
 
-      alert("Location permission is required.");
+      console.error(error);
 
+      alert(
+        "Location permission is required to send alert."
+      );
+
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     }
 
   );
