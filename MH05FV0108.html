@@ -1,11 +1,11 @@
-"<!DOCTYPE html>
-<html lang=""en"">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset=""UTF-8"">
-<meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vehicle Owner Alert</title>
 
-<link href=""https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"" rel=""stylesheet"">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -256,63 +256,63 @@ text-align:center;
 </head>
 <body>
 
-<div class=""container"">
+<div class="container">
 
-<div class=""card"">
+<div class="card">
 
 <!-- FORM SCREEN -->
-<div id=""formScreen"">
+<div id="formScreen">
 
-<div class=""header"">
-<div class=""car-icon"">🚘</div>
+<div class="header">
+<div class="car-icon">🚘</div>
 
-<div class=""car-number"">
+<div class="car-number">
 MH05FV0108
 </div>
 
-<div class=""car-model"">
+<div class="car-model">
 HONDA ELEVATE 
 </div>
 </div>
 
-<div class=""content"">
+<div class="content">
 
-<div class=""notice"">
+<div class="notice">
 Need to reach the vehicle owner?<br>
 Select a reason and send an instant alert.
 </div>
 
-<button class=""option-btn wrong"" onclick=""selectReason(this,'Wrong Parking')"">
+<button class="option-btn wrong" onclick="selectReason(this,'Wrong Parking')">
 🚫 Wrong Parking
 </button>
 
-<button class=""option-btn remove"" onclick=""selectReason(this,'Remove Vehicle')"">
+<button class="option-btn remove" onclick="selectReason(this,'Remove Vehicle')">
 🚘 Please Remove Vehicle
 </button>
 
-<button class=""option-btn contact"" onclick=""selectReason(this,'Contact Owner')"">
+<button class="option-btn contact" onclick="selectReason(this,'Contact Owner')">
 📞 Contact Owner
 </button>
 
-<textarea id=""message""
-placeholder=""Describe the issue here or put your number to contact you.""></textarea>
+<textarea id="message"
+placeholder="Describe the issue here or put your number to contact you."></textarea>
 
-<button id=""submitBtn"" class=""submit-btn"" onclick=""submitAlert()"">
+<button id="submitBtn" class="submit-btn" onclick="submitAlert()">
 📨 Send Alert
 </button>
 
 </div>
 
-<div class=""footer"">
+<div class="footer">
 🔒 Owner's phone number remains private
 </div>
 
 </div>
 
 <!-- SUCCESS SCREEN -->
-<div id=""successScreen"" class=""success-screen"">
+<div id="successScreen" class="success-screen">
 
-<div class=""success-icon"">✓</div>
+<div class="success-icon">✓</div>
 
 <h1>🚗 Thank You!</h1>
 
@@ -320,14 +320,14 @@ placeholder=""Describe the issue here or put your number to contact you.""></tex
 Your message has been successfully delivered to <strong>CAR OWNER</strong>.
 </p>
 
-<div class=""status-box"">
+<div class="status-box">
 <div>📨 Alert Received</div>
 <div>📍 Location Shared</div>
 <div>🕒 Timestamp Recorded</div>
 </div>
 
-<div class=""highlight"">
-SG will contact you shortly.
+<div class="highlight">
+Car Owner will contact you shortly.
 </div>
 
 <p>
@@ -336,7 +336,7 @@ Thank you for taking the time to notify the vehicle owner. 🙏
 ✨ Your small action can make a big difference.
 </p>
 
-<div class=""badge"">
+<div class="badge">
 Drive Safe • Stay Connected • Help Each Other ❤️
 </div>
 
@@ -346,143 +346,143 @@ Drive Safe • Stay Connected • Help Each Other ❤️
 
 </div>
 
-<script src=""config.js""></script> 
+<script src="config.js"></script>  
 <script>
 
-let selectedReason = """";
+let selectedReason = "";
 
 function selectReason(btn, reason){
 
- document.querySelectorAll("".option-btn"").forEach(b => {
- b.classList.remove(""active"");
- });
+  document.querySelectorAll(".option-btn").forEach(b => {
+    b.classList.remove("active");
+  });
 
- btn.classList.add(""active"");
- selectedReason = reason;
+  btn.classList.add("active");
+  selectedReason = reason;
 }
 
 function submitAlert(){
 
- if(selectedReason === """"){
- alert(""Please select a reason."");
- return;
- }
+  if(selectedReason === ""){
+    alert("Please select a reason.");
+    return;
+  }
 
- document.getElementById(""loadingOverlay"").style.display=""flex"";
- document.getElementById(""submitBtn"").disabled=true;
+  document.getElementById("loadingOverlay").style.display="flex";
+  document.getElementById("submitBtn").disabled=true;
 
- navigator.geolocation.getCurrentPosition(
+  navigator.geolocation.getCurrentPosition(
 
- function(pos){
+    function(pos){
 
- const formData = new FormData();
+      const formData = new FormData();
 
- // Get vehicle number from page
- const vehicleNo = document
- .querySelector("".car-number"")
- .innerText
- .trim()
- .toUpperCase();
+      // Get vehicle number from page
+      const vehicleNo = document
+        .querySelector(".car-number")
+        .innerText
+        .trim()
+        .toUpperCase();
 
- formData.append(""vehicleNo"", vehicleNo);
+      formData.append("vehicleNo", vehicleNo);
 
- formData.append(
- ""alert"",
- selectedReason
- );
+      formData.append(
+        "alert",
+        selectedReason
+      );
 
- formData.append(
- ""message"",
- document.getElementById(""message"").value.trim()
- );
+      formData.append(
+        "message",
+        document.getElementById("message").value.trim()
+      );
 
- formData.append(
- ""latitude"",
- pos.coords.latitude
- );
+      formData.append(
+        "latitude",
+        pos.coords.latitude
+      );
 
- formData.append(
- ""longitude"",
- pos.coords.longitude
- );
+      formData.append(
+        "longitude",
+        pos.coords.longitude
+      );
 
- formData.append(
- ""location"",
- `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
- );
+      formData.append(
+        "location",
+        `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+      );
 
- formData.append(
- ""timestamp"",
- new Date().toLocaleString()
- );
+      formData.append(
+        "timestamp",
+        new Date().toLocaleString()
+      );
 
- fetch(SCRIPT_URL, {
- method: ""POST"",
- body: formData
- })
- .then(response => response.text())
- .then(result => {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
 
- document.getElementById(""loadingOverlay"").style.display=""none"";
+        document.getElementById("loadingOverlay").style.display="none";
 
- console.log(""Server Response:"", result);
+        console.log("Server Response:", result);
 
- document.getElementById(""formScreen"").style.display = ""none"";
- document.getElementById(""successScreen"").style.display = ""block"";
+        document.getElementById("formScreen").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
 
- setTimeout(function(){
+        setTimeout(function(){
 
- try {
- window.close();
- } catch(e){}
+          try {
+            window.close();
+          } catch(e){}
 
- window.location.replace(""about:blank"");
+          window.location.replace("about:blank");
 
- }, 5000);
+        }, 5000);
 
- })
- .catch(error => {
+      })
+      .catch(error => {
 
- document.getElementById(""loadingOverlay"").style.display=""none"";
- document.getElementById(""submitBtn"").disabled=false;
+        document.getElementById("loadingOverlay").style.display="none";
+        document.getElementById("submitBtn").disabled=false;
 
- console.error(error);
- alert(""Unable to send alert."");
+        console.error(error);
+        alert("Unable to send alert.");
 
- });
+      });
 
- },
+    },
 
- function(error){
+    function(error){
 
- document.getElementById(""loadingOverlay"").style.display=""none"";
- document.getElementById(""submitBtn"").disabled=false;
+      document.getElementById("loadingOverlay").style.display="none";
+      document.getElementById("submitBtn").disabled=false;
 
- console.error(error);
+      console.error(error);
 
- alert(
- ""Location permission is required to send alert.""
- );
+      alert(
+        "Location permission is required to send alert."
+      );
 
- },
+    },
 
- {
- enableHighAccuracy: true,
- timeout: 10000,
- maximumAge: 0
- }
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
 
- );
+  );
 
 }
 
 </script>
 
 
-<div id=""loadingOverlay"" class=""loading-overlay"">
-<div class=""loader""></div>
-<div class=""loading-text"">📨 Sending Alert...</div>
-<div class=""loading-sub"">Capturing location and notifying vehicle owner</div>
+<div id="loadingOverlay" class="loading-overlay">
+<div class="loader"></div>
+<div class="loading-text">📨 Sending Alert...</div>
+<div class="loading-sub">Capturing location and notifying vehicle owner</div>
 </div>
 
 </body>
