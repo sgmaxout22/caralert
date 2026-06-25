@@ -137,6 +137,11 @@ type="text"
 id="vehicleNo"
 placeholder="MH46AB1234">
 
+<label>Vehicle MODEL</label> <input
+type="text"
+id="vehiclemodel"
+placeholder="Hyundai Verna, Honda City...">  
+
 <label>Owner Name</label> <input
 type="text"
 id="ownerName"
@@ -182,14 +187,17 @@ function registerVehicle(){
 
 const vehicleNo =
 document.getElementById("vehicleNo").value.trim().toUpperCase();
-
+  
+const vehiclemodel =
+document.getElementById("vehiclemodel").value.trim().toUpperCase();
+  
 const ownerName =
 document.getElementById("ownerName").value.trim();
 
 const mobileNo =
 document.getElementById("mobileNo").value.trim();
 
-if(!vehicleNo || !ownerName || !mobileNo){
+if(!vehicleNo ||  !vehiclemodel || !ownerName || !mobileNo){
 
 alert("Please fill all details");
 return;
@@ -217,6 +225,7 @@ form.target = "hiddenFrame";
 const fields = {
 action:"register",
 vehicleNo:vehicleNo,
+vehiclemodel:vehiclemodel,  
 ownerName:ownerName,
 mobileNo:mobileNo
 };
