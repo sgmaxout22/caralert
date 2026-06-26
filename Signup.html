@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vehicle Alert Registration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+padding:20px;
+}
+
+.card{
+width:100%;
+max-width:500px;
+background:white;
+border-radius:25px;
+padding:35px;
+box-shadow:0 20px 50px rgba(0,0,0,0.25);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.logo img{
+    width:180px;
+    max-width:80%;
+    height:auto;
+}
+
+h1{
+text-align:center;
+color:#111827;
+margin-bottom:8px;
+}
+
+.sub{
+text-align:center;
+color:#6b7280;
+margin-bottom:30px;
+font-size:14px;
+}
+
+label{
+display:block;
+margin-bottom:8px;
+font-weight:600;
+color:#374151;
+}
+
+input{
+width:100%;
+padding:15px;
+border:2px solid #e5e7eb;
+border-radius:12px;
+font-size:16px;
+margin-bottom:20px;
+}
+
+input:focus{
+outline:none;
+border-color:#0088cc;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:12px;
+background:#0088cc;
+color:white;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.loader{
+display:none;
+text-align:center;
+margin-top:15px;
+font-weight:600;
+color:#0088cc;
+}
+
+.success{
+display:none;
+text-align:center;
+}
+
+.success h2{
+color:#16a34a;
+margin-bottom:15px;
+}
+
+.success p{
+color:#4b5563;
+line-height:1.6;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div id="formArea">
+
+<div class="logo">
+    <img src="./LOGO.png" alt="SAARTHI Logo">
+</div>
+
+<h1>Vehicle Alert Registration</h1>
+
+<p class="sub">
+Register your vehicle and connect your Telegram account.
+</p>
+
+<label>Vehicle Number</label> <input
+type="text"
+id="vehicleNo"
+placeholder="MH46AB1234">
+
+<label>Vehicle MODEL</label> <input
+type="text"
+id="vehiclemodel"
+placeholder="Hyundai Verna, Honda City...">  
+
+<label>Owner Name</label> <input
+type="text"
+id="ownerName"
+placeholder="Enter Your Name">
+
+<label>Mobile Number</label> <input
+type="tel"
+id="mobileNo"
+placeholder="Enter Mobile Number"
+maxlength="10">
+
+<button onclick="registerVehicle()">
+📲 Register & Connect Telegram
+</button>
+
+<div class="loader" id="loader">
+Saving Registration...
+</div>
+
+</div>
+
+<div class="success" id="success">
+
+<h2>✅ Registration Successful</h2>
+
+<p>
+Your details have been saved successfully.
+</p>
+
+<br>
+
+<p>
+Opening Telegram Bot...
+</p>
+
+</div>
+
+</div>
+<script src="config.js"></script>
+<script>
+
+function registerVehicle(){
+
+const vehicleNo =
+document.getElementById("vehicleNo").value.trim().toUpperCase();
+  
+const vehiclemodel =
+document.getElementById("vehiclemodel").value.trim().toUpperCase();
+  
+const ownerName =
+document.getElementById("ownerName").value.trim();
+
+const mobileNo =
+document.getElementById("mobileNo").value.trim();
+
+if(!vehicleNo ||  !vehiclemodel || !ownerName || !mobileNo){
+
+alert("Please fill all details");
+return;
+
+}
+
+if(!/^\d{10}$/.test(mobileNo)){
+
+alert("Please enter a valid 10 digit mobile number");
+return;
+
+}
+
+document.getElementById("loader").style.display = "block";
+
+const form = document.createElement("form");
+
+form.method = "POST";
+
+form.action = SCRIPT_URL;
+
+form.target = "hiddenFrame";
+
+const fields = {
+action:"register",
+vehicleNo:vehicleNo,
+vehiclemodel:vehiclemodel,  
+ownerName:ownerName,
+mobileNo:mobileNo
+};
+
+for(const key in fields){
+
+const input = document.createElement("input");
+
+input.type = "hidden";
+input.name = key;
+input.value = fields[key];
+
+form.appendChild(input);
+
+}
+
+document.body.appendChild(form);
+
+form.submit();
+
+setTimeout(function(){
+
+document.getElementById("loader").style.display = "none";
+
+document.getElementById("formArea").style.display = "none";
+
+document.getElementById("success").style.display = "block";
+
+setTimeout(function(){
+
+window.location.href =
+"https://t.me/sg_car_alert_bot?start=" +
+encodeURIComponent(vehicleNo);
+
+},2000);
+
+},1500);
+
+}
+
+</script>
+
+<iframe
+name="hiddenFrame"
+style="display:none;">
+</iframe>
+
+
+</script>
+
+</body>
+</html>
