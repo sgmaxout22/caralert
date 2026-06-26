@@ -1,1 +1,69 @@
-<!DOCTYPE html><html><body><script src="config.js"></script><h2>SAARTHI Activation</h2><p>Edit this file as needed.</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAARTHI - Activate Your Car</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#0f172a;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{background:#fff;max-width:460px;width:92%;border-radius:18px;padding:28px;box-shadow:0 15px 35px rgba(0,0,0,.25)}
+h2{text-align:center}p{color:#555}
+.hidden{display:none}
+input,button{width:100%;padding:14px;margin-top:12px;border-radius:10px;font-size:16px}
+input{border:1px solid #ccc}
+button{border:none;background:#0088cc;color:#fff;cursor:pointer}
+#msg{margin-top:16px;font-weight:bold;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+<div id="step1">
+<h2>🚗 Activate Your Car</h2>
+<p>Please make sure <b>Telegram</b> is installed and activated on this phone before continuing.</p>
+<button onclick="next()">Continue</button>
+</div>
+
+<div id="step2" class="hidden">
+<h2>Vehicle Activation</h2>
+<input id="vehicleNo" placeholder="Vehicle Number (MH46AB1234)">
+<input id="activationCode" placeholder="Activation Code">
+<button onclick="activate()">Activate</button>
+<div id="msg"></div>
+</div>
+</div>
+
+<script src="config.js"></script>
+<script>
+function next(){
+ document.getElementById('step1').classList.add('hidden');
+ document.getElementById('step2').classList.remove('hidden');
+}
+async function activate(){
+ const v=document.getElementById('vehicleNo').value.trim().toUpperCase();
+ const c=document.getElementById('activationCode').value.trim();
+ const m=document.getElementById('msg');
+ if(!v||!c){m.style.color='red';m.textContent='Please enter Vehicle Number and Activation Code.';return;}
+ m.style.color='#0088cc';m.textContent='Verifying...';
+ const fd=new FormData();
+ fd.append('action','activate');
+ fd.append('vehicleNo',v);
+ fd.append('activationCode',c);
+ try{
+   const r=await fetch(SCRIPT_URL,{method:'POST',body:fd});
+   const j=await r.json();
+   if(j.status==='success'){
+      m.style.color='green';
+      m.textContent='Activation successful. Redirecting to Telegram...';
+      setTimeout(()=>location.href='https://t.me/sg_car_alert_bot?start='+encodeURIComponent(v),1500);
+   }else{
+      m.style.color='red';
+      m.textContent='Please check Activation Code.';
+   }
+ }catch(e){
+   m.style.color='red';
+   m.textContent='Unable to contact server.';
+ }
+}
+</script>
+</body>
+</html>
