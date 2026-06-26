@@ -49,8 +49,18 @@ async function activate(){
  fd.append('vehicleNo',v);
  fd.append('activationCode',c);
  try{
-   const r=await fetch(SCRIPT_URL,{method:'POST',body:fd});
-   const j=await r.json();
+
+const r = await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:fd
+});
+
+const text = await r.text();
+
+console.log(text);
+
+const j = JSON.parse(text);
+
    if(j.status==='success'){
       m.style.color='green';
       m.textContent='Activation successful. Redirecting to Telegram...';
