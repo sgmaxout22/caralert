@@ -3,243 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Vehicle Alert Registration</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-body{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
-padding:20px;
-}
-
-.card{
-width:100%;
-max-width:520px;
-background:#fff;
-border-radius:25px;
-padding:35px;
-box-shadow:0 20px 50px rgba(0,0,0,.25);
-}
-
-.logo{
-text-align:center;
-margin-bottom:20px;
-}
-
-.logo img{
-width:180px;
-max-width:80%;
-height:auto;
-}
-
-h1{
-text-align:center;
-color:#111827;
-margin-bottom:8px;
-}
-
-.sub{
-text-align:center;
-color:#6b7280;
-margin-bottom:30px;
-font-size:14px;
-}
-
-label{
-display:block;
-margin-bottom:8px;
-font-weight:600;
-color:#374151;
-}
-
-input{
-width:100%;
-padding:15px;
-border:2px solid #e5e7eb;
-border-radius:12px;
-font-size:16px;
-margin-bottom:20px;
-transition:.3s;
-}
-
-input:focus{
-outline:none;
-border-color:#0088cc;
-}
-
-button{
-width:100%;
-padding:16px;
-border:none;
-border-radius:12px;
-background:#0088cc;
-color:#fff;
-font-size:18px;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-transform:translateY(-2px);
-background:#0074b3;
-}
-
-.loader{
-display:none;
-text-align:center;
-margin-top:20px;
-font-weight:600;
-color:#0088cc;
-}
-
-.success{
-display:none;
-text-align:center;
-animation:fadeIn .5s ease;
-}
-
-.success .tick{
-font-size:70px;
-margin-bottom:15px;
-}
-
-.success h2{
-color:#16a34a;
-margin-bottom:15px;
-font-size:28px;
-}
-
-.success p{
-font-size:16px;
-line-height:1.8;
-color:#4b5563;
-}
-
-.countdown{
-margin-top:25px;
-font-size:15px;
-font-weight:600;
-color:#0088cc;
-}
-
-@keyframes fadeIn{
-
-from{
-opacity:0;
-transform:translateY(20px);
-}
-
-to{
-opacity:1;
-transform:translateY(0);
-}
-
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0f172a,#1e293b,#334155);padding:20px}
+.card{width:100%;max-width:520px;background:#fff;border-radius:25px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.logo{text-align:center;margin-bottom:20px}.logo img{width:180px;max-width:80%}
+h1{text-align:center;margin-bottom:8px}.sub{text-align:center;color:#666;margin-bottom:25px}
+label{display:block;margin-bottom:8px;font-weight:600}
+input{width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:12px;margin-bottom:18px;font-size:16px}
+input:focus{outline:none;border-color:#0088cc}
+button{width:100%;padding:15px;border:none;border-radius:12px;background:#0088cc;color:#fff;font-size:18px;font-weight:600;cursor:pointer}
+.loader,.success{display:none;text-align:center}.loader{margin-top:15px;color:#0088cc;font-weight:600}
+.tick{font-size:70px}.success h2{color:#16a34a;margin:15px 0}.success p{line-height:1.8;color:#555}
 </style>
-
 </head>
-
 <body>
-
 <div class="card">
-
 <div id="formArea">
-
-<div class="logo">
-<img src="./LOGO.png" alt="SAARTHI Logo">
-</div>
-
+<div class="logo"><img src="./LOGO.png" alt="Logo"></div>
 <h1>Vehicle Alert Registration</h1>
-
-<p class="sub">
-Register your vehicle with SAARTHI.
-</p>
+<p class="sub">Register your vehicle with SAARTHI.</p>
 
 <label>Vehicle Number</label>
-<input
-type="text"
-id="vehicleNo"
-placeholder="MH46AB1234">
+<input id="vehicleNo" type="text" placeholder="MH46AB1234">
 
 <label>Vehicle Model</label>
-<input
-type="text"
-id="vehiclemodel"
-placeholder="Hyundai Verna">
+<input id="vehiclemodel" type="text" placeholder="Hyundai Verna">
 
 <label>Owner Name</label>
-<input
-type="text"
-id="ownerName"
-placeholder="Enter Your Name">
+<input id="ownerName" type="text" placeholder="Enter Your Name">
 
 <label>Mobile Number</label>
-<input
-type="tel"
-id="mobileNo"
-placeholder="Enter Mobile Number"
-maxlength="10">
+<input id="mobileNo" type="tel" maxlength="10" placeholder="Enter Mobile Number">
 
-<button onclick="registerVehicle()">
-📲 Register Vehicle
-</button>
+<button onclick="registerVehicle()">📲 Register Vehicle</button>
 
-<div class="loader" id="loader">
-Saving Registration...
-</div>
-
+<div class="loader" id="loader">Saving Registration...</div>
 </div>
 
 <div class="success" id="success">
-
 <div class="tick">✅</div>
-
 <h2>Registration Successful</h2>
-
 <p>
-
-Thank you for registering with <b>SAARTHI</b>.
-
-<br><br>
-
-Your vehicle details have been received successfully.
-
-<br><br>
-
+Thank you for registering with <b>SAARTHI</b>.<br><br>
+Your vehicle details have been received successfully.<br><br>
 <b>We will share your QR details and complete the setup shortly.</b>
-
 </p>
-
-<div class="countdown">
-This page will close automatically in
-<span id="count">5</span>
-seconds...
+<br>
+<p>This page will close or redirect in <span id="count">5</span> seconds...</p>
 </div>
-
-</div>
-
 </div>
 
 <script src="config.js"></script>
-
 <script>
-
 function registerVehicle(){
 
 const vehicleNo=document.getElementById("vehicleNo").value.trim().toUpperCase();
@@ -247,103 +65,72 @@ const vehiclemodel=document.getElementById("vehiclemodel").value.trim();
 const ownerName=document.getElementById("ownerName").value.trim();
 const mobileNo=document.getElementById("mobileNo").value.trim();
 
-if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo){
-
-alert("Please fill all details.");
-return;
-
+if(!vehicleNo||!vehiclemodel||!ownerName||!mobileNo){
+alert("Please fill all details.");return;
 }
-
 if(!/^\d{10}$/.test(mobileNo)){
-
-alert("Please enter a valid 10-digit mobile number.");
-return;
-
+alert("Please enter a valid 10-digit mobile number.");return;
 }
 
-document.getElementById("loader").style.display="block";
+loader.style.display="block";
 
 const form=document.createElement("form");
-
 form.method="POST";
 form.action=SCRIPT_URL;
 form.target="hiddenFrame";
 
 const fields={
 action:"register",
-vehicleNo:vehicleNo,
-vehiclemodel:vehiclemodel,
-ownerName:ownerName,
-mobileNo:mobileNo
+vehicleNo,
+vehiclemodel,
+ownerName,
+mobileNo
 };
 
-for(const key in fields){
-
-const input=document.createElement("input");
-
-input.type="hidden";
-input.name=key;
-input.value=fields[key];
-
-form.appendChild(input);
-
+for(const k in fields){
+const i=document.createElement("input");
+i.type="hidden";
+i.name=k;
+i.value=fields[k];
+form.appendChild(i);
 }
 
 document.body.appendChild(form);
-
 form.submit();
 
 setTimeout(function(){
+loader.style.display="none";
+formArea.style.display="none";
+success.style.display="block";
 
-document.getElementById("loader").style.display="none";
-document.getElementById("formArea").style.display="none";
-document.getElementById("success").style.display="block";
+let sec=5;
+const c=document.getElementById("count");
 
-startCountdown();
+const timer=setInterval(function(){
+sec--;
+c.textContent=sec;
+
+if(sec<=0){
+clearInterval(timer);
+
+try{
+window.open('','_self');
+window.close();
+}catch(e){}
+
+setTimeout(function(){
+window.location.replace("about:blank");
+},300);
+
+}
+},1000);
 
 },1500);
 
 }
-
-function startCountdown(){
-
-let seconds=5;
-
-const count=document.getElementById("count");
-
-const timer=setInterval(function(){
-
-seconds--;
-
-count.innerText=seconds;
-
-if(seconds<=0){
-
-clearInterval(timer);
-
-window.close();
-
-/* If browser blocks closing */
-
-setTimeout(function(){
-
-document.querySelector(".countdown").innerHTML=
-"You may now close this page.";
-
-},500);
-
-}
-
-},1000);
-
-}
-
 </script>
 
-<iframe
-name="hiddenFrame"
-style="display:none;">
-</iframe>
+<iframe name="hiddenFrame" style="display:none"></iframe>
 
 </body>
 </html>
