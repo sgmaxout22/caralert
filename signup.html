@@ -57,77 +57,105 @@ Your vehicle details have been received successfully.<br><br>
 </div>
 
 <script src="config.js"></script>
+<script src="config.js"></script>
+
 <script>
+
+function redirectToTelegram() {
+
+    let storeUrl = "https://telegram.org/";
+
+    // Android
+    if (/Android/i.test(navigator.userAgent)) {
+        storeUrl = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
+    }
+
+    // iPhone / iPad
+    else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        storeUrl = "https://apps.apple.com/app/telegram-messenger/id686449807";
+    }
+
+    // Try opening Telegram app
+    window.location.href = "tg://resolve";
+
+    // If Telegram is not installed, open Store
+    setTimeout(function () {
+        window.location.href = storeUrl;
+    }, 1500);
+}
+
 function registerVehicle(){
 
-const vehicleNo=document.getElementById("vehicleNo").value.trim().toUpperCase();
-const vehiclemodel=document.getElementById("vehiclemodel").value.trim();
-const ownerName=document.getElementById("ownerName").value.trim();
-const mobileNo=document.getElementById("mobileNo").value.trim();
+    const vehicleNo = document.getElementById("vehicleNo").value.trim().toUpperCase();
+    const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
+    const ownerName = document.getElementById("ownerName").value.trim();
+    const mobileNo = document.getElementById("mobileNo").value.trim();
 
-if(!vehicleNo||!vehiclemodel||!ownerName||!mobileNo){
-alert("Please fill all details.");return;
+    if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo){
+        alert("Please fill all details.");
+        return;
+    }
+
+    if(!/^\d{10}$/.test(mobileNo)){
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+    }
+
+    document.getElementById("loader").style.display = "block";
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = SCRIPT_URL;
+    form.target = "hiddenFrame";
+
+    const fields = {
+        action: "register",
+        vehicleNo: vehicleNo,
+        vehiclemodel: vehiclemodel,
+        ownerName: ownerName,
+        mobileNo: mobileNo
+    };
+
+    for(const key in fields){
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+
+    setTimeout(function(){
+
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("formArea").style.display = "none";
+        document.getElementById("success").style.display = "block";
+
+        let seconds = 5;
+
+        const count = document.getElementById("count");
+
+        const timer = setInterval(function(){
+
+            seconds--;
+            count.textContent = seconds;
+
+            if(seconds <= 0){
+
+                clearInterval(timer);
+
+                redirectToTelegram();
+
+            }
+
+        },1000);
+
+    },1500);
+
 }
-if(!/^\d{10}$/.test(mobileNo)){
-alert("Please enter a valid 10-digit mobile number.");return;
-}
 
-loader.style.display="block";
-
-const form=document.createElement("form");
-form.method="POST";
-form.action=SCRIPT_URL;
-form.target="hiddenFrame";
-
-const fields={
-action:"register",
-vehicleNo,
-vehiclemodel,
-ownerName,
-mobileNo
-};
-
-for(const k in fields){
-const i=document.createElement("input");
-i.type="hidden";
-i.name=k;
-i.value=fields[k];
-form.appendChild(i);
-}
-
-document.body.appendChild(form);
-form.submit();
-
-setTimeout(function(){
-loader.style.display="none";
-formArea.style.display="none";
-success.style.display="block";
-
-let sec=5;
-const c=document.getElementById("count");
-
-const timer=setInterval(function(){
-sec--;
-c.textContent=sec;
-
-if(sec<=0){
-clearInterval(timer);
-
-try{
-window.open('','_self');
-window.close();
-}catch(e){}
-
-setTimeout(function(){
-window.location.replace("about:blank");
-},300);
-
-}
-},1000);
-
-},1500);
-
-}
 </script>
 
 <iframe name="hiddenFrame" style="display:none"></iframe>
