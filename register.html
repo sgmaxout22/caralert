@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -10,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -28,22 +28,22 @@ padding:20px;
 
 .card{
 width:100%;
-max-width:500px;
-background:white;
+max-width:520px;
+background:#fff;
 border-radius:25px;
 padding:35px;
-box-shadow:0 20px 50px rgba(0,0,0,0.25);
+box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
 .logo{
-    text-align:center;
-    margin-bottom:20px;
+text-align:center;
+margin-bottom:20px;
 }
 
 .logo img{
-    width:180px;
-    max-width:80%;
-    height:auto;
+width:180px;
+max-width:80%;
+height:auto;
 }
 
 h1{
@@ -73,6 +73,7 @@ border:2px solid #e5e7eb;
 border-radius:12px;
 font-size:16px;
 margin-bottom:20px;
+transition:.3s;
 }
 
 input:focus{
@@ -86,7 +87,7 @@ padding:16px;
 border:none;
 border-radius:12px;
 background:#0088cc;
-color:white;
+color:#fff;
 font-size:18px;
 font-weight:600;
 cursor:pointer;
@@ -95,12 +96,13 @@ transition:.3s;
 
 button:hover{
 transform:translateY(-2px);
+background:#0074b3;
 }
 
 .loader{
 display:none;
 text-align:center;
-margin-top:15px;
+margin-top:20px;
 font-weight:600;
 color:#0088cc;
 }
@@ -108,17 +110,47 @@ color:#0088cc;
 .success{
 display:none;
 text-align:center;
+animation:fadeIn .5s ease;
+}
+
+.success .tick{
+font-size:70px;
+margin-bottom:15px;
 }
 
 .success h2{
 color:#16a34a;
 margin-bottom:15px;
+font-size:28px;
 }
 
 .success p{
+font-size:16px;
+line-height:1.8;
 color:#4b5563;
-line-height:1.6;
 }
+
+.countdown{
+margin-top:25px;
+font-size:15px;
+font-weight:600;
+color:#0088cc;
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
 </style>
 
 </head>
@@ -130,38 +162,42 @@ line-height:1.6;
 <div id="formArea">
 
 <div class="logo">
-    <img src="./LOGO.png" alt="SAARTHI Logo">
+<img src="./LOGO.png" alt="SAARTHI Logo">
 </div>
 
 <h1>Vehicle Alert Registration</h1>
 
 <p class="sub">
-Register your vehicle and connect your Telegram account.
+Register your vehicle with SAARTHI.
 </p>
 
-<label>Vehicle Number</label> <input
+<label>Vehicle Number</label>
+<input
 type="text"
 id="vehicleNo"
 placeholder="MH46AB1234">
 
-<label>Vehicle MODEL</label> <input
+<label>Vehicle Model</label>
+<input
 type="text"
 id="vehiclemodel"
-placeholder="Hyundai Verna, Honda City...">  
+placeholder="Hyundai Verna">
 
-<label>Owner Name</label> <input
+<label>Owner Name</label>
+<input
 type="text"
 id="ownerName"
 placeholder="Enter Your Name">
 
-<label>Mobile Number</label> <input
+<label>Mobile Number</label>
+<input
 type="tel"
 id="mobileNo"
 placeholder="Enter Mobile Number"
 maxlength="10">
 
 <button onclick="registerVehicle()">
-📲 Register & Connect Telegram
+📲 Register Vehicle
 </button>
 
 <div class="loader" id="loader">
@@ -172,77 +208,82 @@ Saving Registration...
 
 <div class="success" id="success">
 
-<h2>✅ Registration Successful</h2>
+<div class="tick">✅</div>
+
+<h2>Registration Successful</h2>
 
 <p>
-Your details have been saved successfully.
+
+Thank you for registering with <b>SAARTHI</b>.
+
+<br><br>
+
+Your vehicle details have been received successfully.
+
+<br><br>
+
+<b>We will share your QR details and complete the setup shortly.</b>
+
 </p>
 
-<br>
-
-<p>
-Opening Telegram Bot...
-</p>
-
+<div class="countdown">
+This page will close automatically in
+<span id="count">5</span>
+seconds...
 </div>
 
 </div>
+
+</div>
+
 <script src="config.js"></script>
+
 <script>
 
 function registerVehicle(){
 
-const vehicleNo =
-document.getElementById("vehicleNo").value.trim().toUpperCase();
-  
-const vehiclemodel =
-document.getElementById("vehiclemodel").value.trim().toUpperCase();
-  
-const ownerName =
-document.getElementById("ownerName").value.trim();
+const vehicleNo=document.getElementById("vehicleNo").value.trim().toUpperCase();
+const vehiclemodel=document.getElementById("vehiclemodel").value.trim();
+const ownerName=document.getElementById("ownerName").value.trim();
+const mobileNo=document.getElementById("mobileNo").value.trim();
 
-const mobileNo =
-document.getElementById("mobileNo").value.trim();
+if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo){
 
-if(!vehicleNo ||  !vehiclemodel || !ownerName || !mobileNo){
-
-alert("Please fill all details");
+alert("Please fill all details.");
 return;
 
 }
 
 if(!/^\d{10}$/.test(mobileNo)){
 
-alert("Please enter a valid 10 digit mobile number");
+alert("Please enter a valid 10-digit mobile number.");
 return;
 
 }
 
-document.getElementById("loader").style.display = "block";
+document.getElementById("loader").style.display="block";
 
-const form = document.createElement("form");
+const form=document.createElement("form");
 
-form.method = "POST";
+form.method="POST";
+form.action=SCRIPT_URL;
+form.target="hiddenFrame";
 
-form.action = SCRIPT_URL;
-
-form.target = "hiddenFrame";
-
-const fields = {
+const fields={
 action:"register",
 vehicleNo:vehicleNo,
-vehiclemodel:vehiclemodel,  
+vehiclemodel:vehiclemodel,
 ownerName:ownerName,
 mobileNo:mobileNo
 };
 
 for(const key in fields){
 
-const input = document.createElement("input");
+const input=document.createElement("input");
 
-input.type = "hidden";
-input.name = key;
-input.value = fields[key];
+input.type="hidden";
+input.name=key;
+input.value=fields[key];
 
 form.appendChild(input);
 
@@ -254,21 +295,46 @@ form.submit();
 
 setTimeout(function(){
 
-document.getElementById("loader").style.display = "none";
+document.getElementById("loader").style.display="none";
+document.getElementById("formArea").style.display="none";
+document.getElementById("success").style.display="block";
 
-document.getElementById("formArea").style.display = "none";
+startCountdown();
 
-document.getElementById("success").style.display = "block";
+},1500);
+
+}
+
+function startCountdown(){
+
+let seconds=5;
+
+const count=document.getElementById("count");
+
+const timer=setInterval(function(){
+
+seconds--;
+
+count.innerText=seconds;
+
+if(seconds<=0){
+
+clearInterval(timer);
+
+window.close();
+
+/* If browser blocks closing */
 
 setTimeout(function(){
 
-window.location.href =
-"https://t.me/sg_car_alert_bot?start=" +
-encodeURIComponent(vehicleNo);
+document.querySelector(".countdown").innerHTML=
+"You may now close this page.";
 
-},2000);
+},500);
 
-},1500);
+}
+
+},1000);
 
 }
 
@@ -278,9 +344,6 @@ encodeURIComponent(vehicleNo);
 name="hiddenFrame"
 style="display:none;">
 </iframe>
-
-
-</script>
 
 </body>
 </html>
