@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vehicle Owner Alert</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background: #081B33; /* Unified SAARTHI dark theme base */
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+position: relative;
+overflow-x: hidden;
+}
+
+/* Premium Ambient Neon Blur Circles behind the main card */
+body::before, body::after {
+content: '';
+position: absolute;
+width: 320px;
+height: 320px;
+border-radius: 50%;
+filter: blur(90px);
+z-index: 1;
+opacity: 0.12;
+}
+body::before {
+background: #0057FF;
+top: 10%;
+left: 5%;
+}
+body::after {
+background: #ef4444; /* Alert themed color glow */
+bottom: 10%;
+right: 5%;
+}
+
+.container{
+width:100%;
+max-width:480px;
+position: relative;
+z-index: 2;
+}
+
+/* Premium Frosted Glass Container Card Layout */
+.card{
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border:1px solid rgba(255, 255, 255, 0.12);
+border-radius:24px;
+overflow:hidden;
+box-shadow:0 25px 55px rgba(0,0,0,0.45);
+}
+
+/* High-tech Header Module Gradient Accent */
+.header{
+text-align:center;
+padding:40px 25px;
+background: linear-gradient(135deg, #1e3a8a, #0f172a);
+border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+color:white;
+}
+
+.car-icon{
+font-size:52px;
+margin-bottom:12px;
+filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+}
+
+.car-number{
+font-size:30px;
+font-weight:700;
+letter-spacing:3px;
+background: linear-gradient(to right, #ffffff, #4DA3FF);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.car-model{
+margin-top:8px;
+font-size:14px;
+font-weight:600;
+letter-spacing:1px;
+color: #00C853; /* Highlight status configuration color */
+text-transform: uppercase;
+}
+
+.content{
+padding:30px 25px;
+color:white;
+}
+
+.notice{
+text-align:center;
+margin-bottom:25px;
+line-height:1.6;
+color:#cbd5e1;
+font-size:15px;
+}
+
+/* Modernized Interactive Form Actions */
+.option-btn{
+width:100%;
+padding:16px;
+margin-bottom:14px;
+border:1px solid rgba(255, 255, 255, 0.08);
+border-radius:14px;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+text-align: left;
+padding-left: 20px;
+}
+
+.option-btn:hover{
+transform:translateY(-2px);
+filter: brightness(1.15);
+box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* High Visibility Selection Border Feedback */
+.active{
+border: 2px solid #ffffff !important;
+box-shadow: 0 0 20px rgba(255, 255, 255, 0.25) !important;
+transform: scale(1.01) translateY(-2px) !important;
+}
+
+.wrong{
+background: rgba(239, 68, 68, 0.2);
+color: #fca5a5;
+border-color: rgba(239, 68, 68, 0.4);
+}
+
+.remove{
+background: rgba(245, 158, 11, 0.2);
+color: #fde047;
+border-color: rgba(245, 158, 11, 0.4);
+}
+
+.contact{
+background: rgba(34, 197, 94, 0.2);
+color: #86efac;
+border-color: rgba(34, 197, 94, 0.4);
+}
+
+/* Modernized Custom Textarea Field */
+textarea{
+width:100%;
+height:120px;
+border:1px solid rgba(255, 255, 255, 0.12);
+border-radius:14px;
+padding:15px;
+margin-top:12px;
+resize:none;
+font-size:15px;
+outline:none;
+background: rgba(8, 27, 51, 0.6);
+color: white;
+transition: all 0.3s ease;
+}
+
+textarea::placeholder {
+color: rgba(255, 255, 255, 0.3);
+transition: color 0.2s ease;
+}
+
+/* Clears placeholder hint instantly when typing */
+textarea:focus::placeholder {
+color: transparent;
+}
+
+textarea:focus{
+border-color: #0057FF;
+background: rgba(8, 27, 51, 0.8);
+box-shadow: 0 0 15px rgba(0, 87, 255, 0.25);
+}
+
+/* High-Performance Neon Action Buttons */
+.submit-btn{
+width:100%;
+padding:16px;
+margin-top:20px;
+border:none;
+border-radius:14px;
+background: linear-gradient(135deg, #0057FF, #0077FF);
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 15px rgba(0, 87, 255, 0.3);
+letter-spacing: 0.5px;
+}
+
+.submit-btn:hover{
+background: linear-gradient(135deg, #00C853, #00E676);
+box-shadow: 0 4px 20px rgba(0, 200, 83, 0.4);
+transform: translateY(-2px);
+}
+
+.submit-btn:disabled{
+opacity:0.5;
+cursor:not-allowed;
+transform: translateY(0) !important;
+box-shadow: none !important;
+}
+
+.footer{
+padding:20px 15px 5px;
+text-align:center;
+color:#64748b;
+font-size:13px;
+letter-spacing: 0.5px;
+}
+
+/* Success Display Transitions Layout */
+.success-screen{
+display:none;
+padding:45px 30px;
+text-align:center;
+animation: scaleIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+0% { transform: scale(0.92); opacity: 0; }
+100% { transform: scale(1); opacity: 1; }
+}
+
+.success-icon{
+width:90px;
+height:90px;
+margin:0 auto 25px;
+border-radius:50%;
+background:linear-gradient(135deg,#00C853,#00E676);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:44px;
+color:white;
+box-shadow: 0 0 25px rgba(0, 200, 83, 0.4);
+}
+
+.success-screen h1{
+color:white;
+margin-bottom:15px;
+font-size: 1.8rem;
+font-weight: 700;
+}
+
+.success-screen p{
+color:#cbd5e1;
+line-height:1.7;
+font-size: 15px;
+}
+
+.status-box{
+margin:30px 0;
+background:rgba(255, 255, 255, 0.04);
+padding:22px;
+border-radius:16px;
+text-align:left;
+border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.status-box div{
+margin:12px 0;
+color:#e2e8f0;
+font-size: 14px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.status-box div::before {
+content: '✓';
+color: #00C853;
+font-weight: bold;
+}
+
+.highlight{
+font-size:20px;
+font-weight:700;
+color:#00C853;
+margin:25px 0;
+filter: drop-shadow(0 2px 8px rgba(0, 200, 83, 0.2));
+}
+
+.badge{
+display:inline-block;
+margin-top:25px;
+padding:12px 24px;
+border-radius:30px;
+background:rgba(255, 255, 255, 0.05);
+color:#94a3b8;
+font-weight:600;
+font-size: 13px;
+border: 1px solid rgba(255, 255, 255, 0.08);
+letter-spacing: 0.5px;
+}
+
+/* Loader Screen Overlay Panels Styling */
+.loading-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(8, 27, 51, 0.95);
+backdrop-filter:blur(10px);
+z-index:9999;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.loader{
+width:70px;
+height:70px;
+border:5px solid rgba(255, 255, 255, 0.1);
+border-top:5px solid #0057FF;
+border-radius:50%;
+animation:spin 1s linear infinite;
+box-shadow: 0 0 20px rgba(0, 87, 255, 0.2);
+}
+
+.loading-text{
+margin-top:25px;
+font-size:18px;
+font-weight:700;
+color:white;
+text-align:center;
+letter-spacing: 0.5px;
+}
+
+.loading-sub{
+margin-top:10px;
+color:#94a3b8;
+font-size:14px;
+text-align:center;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="card">
+
+<!-- FORM SCREEN -->
+<div id="formScreen">
+    <div class="header">
+        <div class="car-icon">🚘</div>
+        <!-- Automatically updated by the script below -->
+        <div id="displayVehicleNo" class="car-number">LOADING...</div>
+        <div id="displayVehicleModel" class="car-model">VEHICLE DATA</div>
+    </div>
+
+    <div class="content">
+        <div class="notice">
+            Need to reach the vehicle owner?<br>
+            Select a reason and send an instant alert.
+        </div>
+
+        <button class="option-btn wrong" onclick="selectReason(this,'Wrong Parking')">
+            🚫 Wrong Parking
+        </button>
+
+        <button class="option-btn remove" onclick="selectReason(this,'Remove Vehicle')">
+            🚘 Please Remove Vehicle
+        </button>
+
+        <button class="option-btn contact" onclick="selectReason(this,'Contact Owner')">
+            📞 Contact Owner
+        </button>
+
+        <textarea id="message" placeholder="Describe the issue here or put your number to contact you."></textarea>
+        <button id="submitBtn" class="submit-btn" onclick="submitAlert()">📨 Send Alert</button>
+    </div>
+
+    <div class="footer">
+        🔒 Owner's phone number remains private
+    </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div id="successScreen" class="success-screen">
+    <div class="success-icon">✓</div>
+    <h1>🚗 Thank You!</h1>
+    <p>Your message has been successfully delivered to the <strong>CAR OWNER</strong>.</p>
+
+    <div class="status-box">
+        <div>Alert Received</div>
+        <div>Location Shared</div>
+        <div>Timestamp Recorded</div>
+    </div>
+
+    <div class="highlight">
+        Car Owner will contact you shortly.
+    </div>
+
+    <p>
+        Thank you for taking the time to notify the vehicle owner. 🙏
+        <br><br>
+        ✨ Your small action can make a big difference.
+    </p>
+
+    <div class="badge">
+        Drive Safe • Stay Connected • Help Each Other ❤️
+    </div>
+</div>
+
+</div>
+</div>
+
+<!-- Scripts -->
+<script src="config.js"></script>  
+<script>
+// ==========================================================================
+// NEW: Extract parameters from QR Scan URL and apply to the UI placeholders
+// ==========================================================================
+const urlParams = new URLSearchParams(window.location.search);
+const vehicleNoParam = urlParams.get('vno') ? urlParams.get('vno').trim().toUpperCase() : "UNKNOWN";
+const vehicleModelParam = urlParams.get('vmodel') ? urlParams.get('vmodel').trim().toUpperCase() : "VEHICLE";
+
+document.getElementById("displayVehicleNo").innerText = vehicleNoParam;
+document.getElementById("displayVehicleModel").innerText = vehicleModelParam;
+
+// ==========================================================================
+// Existing Flow Logic Pipelines
+// ==========================================================================
+let selectedReason = "";
+
+function selectReason(btn, reason){
+  document.querySelectorAll(".option-btn").forEach(b => {
+    b.classList.remove("active");
+  });
+  btn.classList.add("active");
+  selectedReason = reason;
+}
+
+function submitAlert(){
+  if(selectedReason === ""){
+    alert("Please select a reason.");
+    return;
+  }
+
+  document.getElementById("loadingOverlay").style.display="flex";
+  document.getElementById("submitBtn").disabled=true;
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      const formData = new FormData();
+
+      // Dynamically grabs the decoded asset parameters processed on setup loading
+      formData.append("vehicleNo", vehicleNoParam);
+      formData.append("alert", selectedReason);
+      formData.append("message", document.getElementById("message").value.trim());
+      formData.append("latitude", pos.coords.latitude);
+      formData.append("longitude", pos.coords.longitude);
+      formData.append("location", `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
+      formData.append("timestamp", new Date().toLocaleString());
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
+        document.getElementById("loadingOverlay").style.display="none";
+        console.log("Server Response:", result);
+
+        document.getElementById("formScreen").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
+
+        setTimeout(function(){
+          try {
+            window.close();
+          } catch(e){}
+          window.location.replace("about:blank");
+        }, 5000);
+      })
+      .catch(error => {
+        document.getElementById("loadingOverlay").style.display="none";
+        document.getElementById("submitBtn").disabled=false;
+        console.error(error);
+        alert("Unable to send alert.");
+      });
+    },
+    function(error){
+      document.getElementById("loadingOverlay").style.display="none";
+      document.getElementById("submitBtn").disabled=false;
+      console.error(error);
+      alert("Location permission is required to send alert.");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+}
+</script>
+
+<div id="loadingOverlay" class="loading-overlay">
+<div class="loader"></div>
+<div class="loading-text">📨 Sending Alert...</div>
+<div class="loading-sub">Capturing location and notifying vehicle owner</div>
+</div>
+
+</body>
+</html>
