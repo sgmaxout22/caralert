@@ -370,9 +370,8 @@ text-align:center;
 <div id="formScreen">
     <div class="header">
         <div class="car-icon">🚘</div>
-        <!-- Automatically updated by the script below -->
-        <div id="displayVehicleNo" class="car-number">LOADING...</div>
-        <div id="displayVehicleModel" class="car-model">VEHICLE DATA</div>
+        <div id="displayVehicleNo" class="car-number">MH05EV8508</div>
+        <div id="displayVehicleModel" class="car-model">HYUNDAI VERNA</div>
     </div>
 
     <div class="content">
@@ -432,22 +431,22 @@ text-align:center;
 </div>
 </div>
 
-<!-- Scripts -->
+<!-- Path pointing to js folder -->
 <script src="js/config.js"></script>  
 <script>
-// ==========================================================================
-// NEW: Extract parameters from QR Scan URL and apply to the UI placeholders
-// ==========================================================================
+// Parse live scanning query variables directly from the browser window window parameters
 const urlParams = new URLSearchParams(window.location.search);
-const vehicleNoParam = urlParams.get('vno') ? urlParams.get('vno').trim().toUpperCase() : "UNKNOWN";
-const vehicleModelParam = urlParams.get('vmodel') ? urlParams.get('vmodel').trim().toUpperCase() : "VEHICLE";
+const vehicleNoParam = urlParams.get('vno') ? urlParams.get('vno').trim().toUpperCase() : "";
+const vehicleModelParam = urlParams.get('vmodel') ? urlParams.get('vmodel').trim().toUpperCase() : "";
 
-document.getElementById("displayVehicleNo").innerText = vehicleNoParam;
-document.getElementById("displayVehicleModel").innerText = vehicleModelParam;
+// Only overwrite placeholders if parameters exist in the scanned QR link URL
+if(vehicleNoParam) {
+    document.getElementById("displayVehicleNo").innerText = vehicleNoParam;
+}
+if(vehicleModelParam) {
+    document.getElementById("displayVehicleModel").innerText = vehicleModelParam;
+}
 
-// ==========================================================================
-// Existing Flow Logic Pipelines
-// ==========================================================================
 let selectedReason = "";
 
 function selectReason(btn, reason){
@@ -470,9 +469,11 @@ function submitAlert(){
   navigator.geolocation.getCurrentPosition(
     function(pos){
       const formData = new FormData();
+      
+      // Grab text directly from the active, displayed layout tags safely
+      const finalVehicleNo = document.getElementById("displayVehicleNo").innerText.trim().toUpperCase();
 
-      // Dynamically grabs the decoded asset parameters processed on setup loading
-      formData.append("vehicleNo", vehicleNoParam);
+      formData.append("vehicleNo", finalVehicleNo);
       formData.append("alert", selectedReason);
       formData.append("message", document.getElementById("message").value.trim());
       formData.append("latitude", pos.coords.latitude);
@@ -521,6 +522,7 @@ function submitAlert(){
 }
 </script>
 
+<!-- Restored Overlay Layout Components -->
 <div id="loadingOverlay" class="loading-overlay">
 <div class="loader"></div>
 <div class="loading-text">📨 Sending Alert...</div>
