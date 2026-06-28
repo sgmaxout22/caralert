@@ -1,68 +1,275 @@
-ect<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vehicle Alert Registration</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#0f172a,#1e293b,#334155);padding:20px}
-.card{width:100%;max-width:520px;background:#fff;border-radius:25px;padding:35px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
-.logo{text-align:center;margin-bottom:20px}.logo img{width:180px;max-width:80%}
-h1{text-align:center;margin-bottom:8px}.sub{text-align:center;color:#666;margin-bottom:25px}
-label{display:block;margin-bottom:8px;font-weight:600}
-input{width:100%;padding:14px;border:2px solid #e5e7eb;border-radius:12px;margin-bottom:18px;font-size:16px}
-input:focus{outline:none;border-color:#0088cc}
-button{width:100%;padding:15px;border:none;border-radius:12px;background:#0088cc;color:#fff;font-size:18px;font-weight:600;cursor:pointer}
-.loader,.success{display:none;text-align:center}.loader{margin-top:15px;color:#0088cc;font-weight:600}
-.tick{font-size:70px}.success h2{color:#16a34a;margin:15px 0}.success p{line-height:1.8;color:#555}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Alert Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #081B33;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Premium Geometric Background Elements */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            opacity: 0.15;
+        }
+        body::before {
+            background: #0057FF;
+            top: 10%;
+            left: 10%;
+        }
+        body::after {
+            background: #00C853;
+            bottom: 10%;
+            right: 10%;
+        }
+
+        /* Upgraded Premium Glassmorphism Card Element */
+        .card {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo img {
+            width: 160px;
+            max-width: 80%;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(to right, #ffffff, #4DA3FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.88rem;
+            color: #4DA3FF;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Modernized Interactive Form Fields */
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(8, 27, 51, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0057FF;
+            background: rgba(8, 27, 51, 0.7);
+            box-shadow: 0 0 15px rgba(0, 87, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* High-Performance Neon Glow Action Button */
+        button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0057FF, #0077FF);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 87, 255, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #00C853, #00E676);
+            box-shadow: 0 4px 20px rgba(0, 200, 83, 0.4);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Loading UI Animation */
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #4DA3FF;
+            font-weight: 500;
+            font-size: 0.95rem;
+            animation: pulseText 1.5s infinite linear;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Complete Success State Transformation Component */
+        .success {
+            display: none;
+            text-align: center;
+            animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .tick {
+            font-size: 64px;
+            line-height: 1;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 15px rgba(22, 163, 74, 0.4));
+        }
+
+        .success h2 {
+            color: #00C853;
+            margin: 15px 0 20px;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .success p {
+            line-height: 1.7;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .success b {
+            color: #4DA3FF;
+        }
+
+        .countdown-text {
+            margin-top: 20px;
+            font-size: 0.88rem;
+            color: #94a3b8 !important;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #count {
+            color: #ff4d4d;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0 3px;
+        }
+/* Instantly hides the placeholder text the second the input field gains focus */
+input:focus::placeholder {
+    color: transparent;
+}
+
+
+    </style>
 </head>
 <body>
+
 <div class="card">
-<div id="formArea">
-<div class="logo"><img src="./LOGO.png" alt="Logo"></div>
-<h1>Vehicle Alert Registration</h1>
-<p class="sub">Register your vehicle with SAARTHI.</p>
+    <div id="formArea">
+        <div class="logo"><img src="./LOGO.png" alt="Logo"></div>
+        <h1>Vehicle Alert Registration</h1>
+        <p class="sub">Register your vehicle with SAARTHI.</p>
 
-<label>Vehicle Number</label>
-<input id="vehicleNo" type="text" placeholder="MH46AB1234">
+        <label>Vehicle Number</label>
+        <input id="vehicleNo" type="text" placeholder="MH46AB1234">
 
-<label>Vehicle Model</label>
-<input id="vehiclemodel" type="text" placeholder="Hyundai Verna">
+        <label>Vehicle Model</label>
+        <input id="vehiclemodel" type="text" placeholder="Hyundai Verna">
 
-<label>Owner Name</label>
-<input id="ownerName" type="text" placeholder="Enter Your Name">
+        <label>Owner Name</label>
+        <input id="ownerName" type="text" placeholder="Enter Your Name">
 
-<label>Mobile Number</label>
-<input id="mobileNo" type="tel" maxlength="10" placeholder="Enter Mobile Number">
+        <label>Mobile Number</label>
+        <input id="mobileNo" type="tel" maxlength="10" placeholder="Enter Mobile Number">
 
-<button onclick="registerVehicle()">📲 Register Vehicle</button>
+        <button onclick="registerVehicle()">📲 Register Vehicle</button>
 
-<div class="loader" id="loader">Saving Registration...</div>
-</div>
+        <div class="loader" id="loader">Saving Registration...</div>
+    </div>
 
-<div class="success" id="success">
-<div class="tick">✅</div>
-<h2>Registration Successful</h2>
-<p>
-Thank you for registering with <b>SAARTHI</b>.<br><br>
-Your vehicle details have been received successfully.<br><br>
-<b>We are redirecting you to install Telegram app on your device. Make sure to Install and register your Number.</b>
-</p>
-<br>
-<p>This page will close or redirect in <span id="count">5</span> seconds...</p>
-</div>
+    <div class="success" id="success">
+        <div class="tick">✅</div>
+        <h2>Registration Successful</h2>
+        <p>
+            Thank you for registering with <b>SAARTHI</b>.<br><br>
+            Your vehicle details have been received successfully.<br><br>
+            <b>We are redirecting you to install Telegram app on your device. Make sure to Install and register your Number.</b>
+        </p>
+        <p class="countdown-text">This page will close or redirect in <span id="count">5</span> seconds...</p>
+    </div>
 </div>
 
 <script src="config.js"></script>
 <script src="config.js"></script>
 
 <script>
-
 function redirectToTelegram() {
-
     let storeUrl = "https://telegram.org/";
 
     // Android
@@ -85,7 +292,6 @@ function redirectToTelegram() {
 }
 
 function registerVehicle(){
-
     const vehicleNo = document.getElementById("vehicleNo").value.trim().toUpperCase();
     const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
@@ -128,34 +334,24 @@ function registerVehicle(){
     form.submit();
 
     setTimeout(function(){
-
         document.getElementById("loader").style.display = "none";
         document.getElementById("formArea").style.display = "none";
         document.getElementById("success").style.display = "block";
 
         let seconds = 5;
-
         const count = document.getElementById("count");
 
         const timer = setInterval(function(){
-
             seconds--;
             count.textContent = seconds;
 
             if(seconds <= 0){
-
                 clearInterval(timer);
-
                 redirectToTelegram();
-
             }
-
         },1000);
-
     },1500);
-
 }
-
 </script>
 
 <iframe name="hiddenFrame" style="display:none"></iframe>
