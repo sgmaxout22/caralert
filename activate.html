@@ -21,83 +21,154 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+background: #081B33; /* Matches Saarthi base dark aesthetic */
 padding:20px;
+position: relative;
+overflow: hidden;
 }
 
-.card{
+/* Premium Ambient Neon Blur Circles behind the card */
+body::before, body::after {
+content: '';
+position: absolute;
+width: 300px;
+height: 300px;
+border-radius: 50%;
+filter: blur(80px);
+z-index: 1;
+opacity: 0.15;
+}
+body::before {
+background: #0057FF;
+top: 10%;
+left: 10%;
+}
+body::after {
+background: #00C853;
+bottom: 10%;
+right: 10%;
+}
+
+/* Dynamic Glassmorphism Container Card Styling */
+.card {
 width:100%;
-max-width:500px;
-background:#fff;
-border-radius:25px;
-padding:35px;
-box-shadow:0 20px 50px rgba(0,0,0,.25);
+max-width:480px;
+background: rgba(255, 255, 255, 0.05);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border-radius:24px;
+padding:40px 35px;
+box-shadow:0 25px 60px rgba(0,0,0,.45);
+border: 1px solid rgba(255, 255, 255, 0.12);
+position: relative;
+z-index: 2;
 }
 
 .logo{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
 .logo img{
-width:180px;
+width:160px;
 max-width:80%;
 height:auto;
+filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
 }
 
 h2{
 text-align:center;
-color:#111827;
-margin-bottom:10px;
+font-size: 1.7rem;
+font-weight: 700;
+margin-bottom:12px;
+background: linear-gradient(to right, #ffffff, #4DA3FF);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+letter-spacing: 0.5px;
 }
 
 p{
 text-align:center;
-color:#6b7280;
-margin-bottom:20px;
-line-height:1.6;
+color: #cbd5e1;
+margin-bottom:28px;
+line-height:1.7;
+font-size: 0.95rem;
+}
+
+p b {
+color: #4DA3FF;
 }
 
 .hidden{
 display:none;
 }
 
+/* Modernized Interactive Form Fields */
 input{
 width:100%;
-padding:15px;
-border:2px solid #e5e7eb;
+padding:15px 18px;
+background: rgba(8, 27, 51, 0.6);
+border: 1px solid rgba(255, 255, 255, 0.15);
 border-radius:12px;
-font-size:16px;
-margin-bottom:18px;
+font-size:15px;
+color: #fff;
+margin-bottom:20px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input::placeholder {
+color: rgba(255, 255, 255, 0.3);
+transition: color 0.2s ease;
+}
+
+/* Instantly hides the sample placeholder text when clicking to type */
+input:focus::placeholder {
+color: transparent;
 }
 
 input:focus{
 outline:none;
-border-color:#0088cc;
+border-color:#0057FF;
+background: rgba(8, 27, 51, 0.8);
+box-shadow: 0 0 15px rgba(0, 87, 255, 0.25);
+transform: translateY(-1px);
 }
 
+/* High-Performance Neon Glow Action Button */
 button{
 width:100%;
-padding:15px;
+padding:16px;
 border:none;
 border-radius:12px;
-background:#0088cc;
+background: linear-gradient(135deg, #0057FF, #0077FF);
 color:#fff;
-font-size:17px;
+font-size:16px;
 font-weight:600;
 cursor:pointer;
-transition:.3s;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 4px 15px rgba(0, 87, 255, 0.3);
+letter-spacing: 0.5px;
 }
 
 button:hover{
 transform:translateY(-2px);
-background:#0073ad;
+background: linear-gradient(135deg, #00C853, #00E676);
+box-shadow: 0 4px 20px rgba(0, 200, 83, 0.4);
+}
+
+button:active{
+transform: translateY(0);
 }
 
 #msg{
-margin-top:18px;
+margin-top:22px;
 font-weight:600;
 text-align:center;
+font-size: 0.95rem;
+line-height: 1.5;
+padding: 10px;
+border-radius: 8px;
+transition: all 0.3s ease;
 }
 
 </style>
@@ -147,6 +218,7 @@ Activate
 
 </div>
 
+<!-- Kept Script Logic Completely Untouched -->
 <script src="config.js"></script>
 
 <script>
@@ -166,13 +238,13 @@ const m=document.getElementById("msg");
 
 if(!v || !c){
 
-m.style.color="red";
+m.style.color="#ef4444"; /* Softened deep red for pristine dark UI presentation */
 m.innerHTML="Please enter Vehicle Number and Activation Code.";
 return;
 
 }
 
-m.style.color="#0088cc";
+m.style.color="#4DA3FF";
 m.innerHTML="Verifying...";
 
 const fd=new FormData();
@@ -196,7 +268,7 @@ const j=JSON.parse(text);
 
 if(j.status==="success"){
 
-m.style.color="green";
+m.style.color="#00C853";
 m.innerHTML="✅ Activation successful.<br>Redirecting to Telegram...";
 
 setTimeout(function(){
@@ -208,7 +280,7 @@ window.location.href="https://t.me/sg_car_alert_bot?start="+encodeURIComponent(v
 }
 else{
 
-m.style.color="red";
+m.style.color="#ef4444";
 m.innerHTML="❌ Please check your Vehicle Number or Activation Code.";
 
 }
@@ -218,7 +290,7 @@ catch(err){
 
 console.log(err);
 
-m.style.color="red";
+m.style.color="#ef4444";
 m.innerHTML="❌ Unable to contact server.";
 
 }
