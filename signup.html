@@ -302,9 +302,18 @@ function registerVehicle(){
     const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobileNo = document.getElementById("mobileNo").value.trim();
+    const email = document.getElementById("email").value.trim(); // Added field
 
-    if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo){
+    // Updated validation to include email
+    if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo || !email){
         alert("Please fill all details.");
+        return;
+    }
+
+    // Basic Email format validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailPattern.test(email)){
+        alert("Please enter a valid email address.");
         return;
     }
 
@@ -325,7 +334,8 @@ function registerVehicle(){
         vehicleNo: vehicleNo,
         vehiclemodel: vehiclemodel,
         ownerName: ownerName,
-        mobileNo: mobileNo
+        mobileNo: mobileNo,
+        email: email // Added to payload
     };
 
     for(const key in fields){
@@ -335,7 +345,7 @@ function registerVehicle(){
         input.value = fields[key];
         form.appendChild(input);
     }
-
+    // ... rest of your function remains the same
     document.body.appendChild(form);
     form.submit();
 
