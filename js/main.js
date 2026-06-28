@@ -1,69 +1,78 @@
 // ==========================================================================
-// 1. Loader & Initialization Components
+// 1. Loader & Initialization Components (Strict File Protocol Safe)
 // ==========================================================================
-// Hides the full-screen pre-loader element 800ms after the page fully loads
+function hideLoader() {
+    const loaderElement = document.getElementById('loader');
+    if (loaderElement) {
+        loaderElement.style.display = 'none';
+    }
+}
+
+// FORCE Bypasses the loader screen after 1 second if events fail due to browser security policies
+setTimeout(hideLoader, 1000);
+
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        if (typeof loader !== 'undefined') {
-            loader.style.display = 'none';[cite: 29]
-        }
-    }, 800);[cite: 29]
+    hideLoader();
 });
 
 // ==========================================================================
-// 2. Interaction Observers (Timeline & Animated Counters)
+// 2. Interaction Observers (Wrapped to prevent crashing on local origins)
 // ==========================================================================
-// Reveal steps on scroll inside the "How It Works" timeline section
-const stepObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if (e.isIntersecting) {
-            e.target.classList.add('show');[cite: 27]
-        }
-    });
-});
-document.querySelectorAll('.step').forEach(s => stepObserver.observe(s));[cite: 27]
-
-// Animate metric numerical counters dynamically once visible on screen
-const counters = document.querySelectorAll('.count');[cite: 24]
-const counterObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (!entry.isIntersecting) return;[cite: 24]
-        
-        const el = entry.target;[cite: 24]
-        const target = +el.dataset.target;[cite: 24]
-        let n = 0;[cite: 24]
-        const step = Math.max(1, Math.ceil(target / 80));[cite: 24]
-        
-        const timer = setInterval(() => {
-            n += step;[cite: 24]
-            if (n >= target) {
-                n = target;[cite: 24]
-                clearInterval(timer);[cite: 24]
+try {
+    // Reveal steps on scroll inside the "How It Works" timeline section
+    const stepObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('show');
             }
-            // Appends percentage tags or standard positive signs appropriately
-            el.textContent = n + (target === 99 ? '%' : target === 24 ? '+' : '+');[cite: 24]
-        }, 20);[cite: 24]
-        
-        counterObserver.unobserve(el);[cite: 24]
+        });
     });
-});
-counters.forEach(c => counterObserver.observe(c));[cite: 24]
+    document.querySelectorAll('.step').forEach(s => stepObserver.observe(s));
+
+    // Animate metric numerical counters dynamically once visible on screen
+    const counters = document.querySelectorAll('.count');
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            
+            const el = entry.target;
+            const target = +el.dataset.target;
+            let n = 0;
+            const step = Math.max(1, Math.ceil(target / 80));
+            
+            const timer = setInterval(() => {
+                n += step;
+                if (n >= target) {
+                    n = target;
+                    clearInterval(timer);
+                }
+                el.textContent = n + (target === 99 ? '%' : target === 24 ? '+' : '+');
+            }, 20);
+            
+            counterObserver.unobserve(el);
+        });
+    });
+    counters.forEach(c => counterObserver.observe(c));
+} catch (e) {
+    console.warn("IntersectionObserver blocked or unsupported on file:/// origin. Automatically making sections visible.");
+    // Fallback if browser blocks the observers locally: Show everything immediately
+    document.querySelectorAll('.step').forEach(s => s.classList.add('show'));
+}
 
 // ==========================================================================
 // 3. UI Component Actions (Interactive FAQ Dropdowns & Live Search Filter)
 // ==========================================================================
-// Toggle disclosure answers within the FAQ component lists
 document.querySelectorAll(".q").forEach(b => {
-    b.onclick = () => b.parentElement.classList.toggle("open");[cite: 23]
+    b.onclick = () => b.parentElement.classList.toggle("open");
 });
 
-// Real-time keyword filter query parser over the FAQ list markup
+// Safe keyword filter configuration
 const searchInput = document.getElementById('search');
 if (searchInput) {
     searchInput.oninput = () => {
-        let t = searchInput.value.toLowerCase();[cite: 23]
+        let t = searchInput.value.toLowerCase();
         document.querySelectorAll(".item").forEach(i => {
-            i.style.display = i.innerText.toLowerCase().includes(t) ? "block" : "none";[cite: 23]
+            i.style.display = i.innerText.toLowerCase().includes(t) ? "block" : "none";
         });
     };
 }
@@ -71,46 +80,42 @@ if (searchInput) {
 // ==========================================================================
 // 4. Global Cards & Video Container Micro-interactions
 // ==========================================================================
-// Setup standard hover transformations smoothly on generic component cards
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('mousemove', () => {
-        card.style.transform = 'translateY(-12px) scale(1.03)';[cite: 26]
+        card.style.transform = 'translateY(-12px) scale(1.03)';
     });
     card.addEventListener('mouseenter', () => {
-        card.style.scale = '1.03';[cite: 28]
+        card.style.scale = '1.03';
     });
     card.addEventListener('mouseleave', () => {
-        card.style.transform = '';[cite: 26]
-        card.style.scale = '';[cite: 28]
+        card.style.transform = '';
+        card.style.scale = '';
     });
 });
 
-// Setup specialized highlight shadows relative to the video card elements
 document.querySelectorAll('.video-card').forEach(card => {
     card.addEventListener('mouseenter', () => {
-        card.style.boxShadow = '0 20px 40px rgba(0,87,255,.45)';[cite: 25]
+        card.style.boxShadow = '0 20px 40px rgba(0,87,255,.45)';
     });
     card.addEventListener('mouseleave', () => {
-        card.style.boxShadow = '';[cite: 25]
+        card.style.boxShadow = '';
     });
 });
 
 // ==========================================================================
 // 5. Native Forms & Auxiliary Window Control Scripts
 // ==========================================================================
-// Standard browser interception logic running over the contact block
 const contactForm = document.querySelector('form');
 if (contactForm) {
     contactForm.onsubmit = e => {
-        e.preventDefault();[cite: 22]
-        alert('Demo form submitted');[cite: 22]
+        e.preventDefault();
+        alert('Demo form submitted');
     };
 }
 
-// Smooth scroll implementation bound to the footer return actions
 const topButton = document.getElementById('topBtn');
 if (topButton) {
     topButton.onclick = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });[cite: 21]
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 }
