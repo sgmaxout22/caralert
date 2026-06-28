@@ -80,7 +80,70 @@ li {
 }
 
 /* ==========================================================================
-   3. Part 1 & 2: Loader, Nav, Hero, About & Features Sections
+   3. SAARTHI Brand Logo Design Components
+   ========================================================================== */
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.logo-shield {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #0057FF, #00C853);
+    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(0, 87, 255, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    animation: pulseGlow 3s infinite alternate;
+}
+
+.logo-icon {
+    font-size: 28px;
+    color: #ffffff;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.brand-name {
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #ffffff, #4DA3FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 8px rgba(0, 87, 255, 0.3));
+}
+
+.brand-tagline {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #00C853;
+    margin-top: 2px;
+    opacity: 0.9;
+}
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 87, 255, 0.5); }
+    100% { transform: scale(1.04); box-shadow: 0 0 35px rgba(0, 200, 83, 0.7); }
+}
+
+/* ==========================================================================
+   4. Loader & Navigation Bar Elements (Left Aligned Horizontally)
    ========================================================================== */
 #loader {
     position: fixed;
@@ -111,33 +174,68 @@ nav {
     top: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 50px;
     padding: 16px 40px;
     background: rgba(0, 0, 0, .35);
     backdrop-filter: blur(10px);
+    z-index: 90;
 }
 
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4DA3FF;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin: 0;
+}
+
+nav a {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   5. Hero Background Video Setup
+   ========================================================================== */
 .hero {
     height: 100vh;
     position: relative;
+    overflow: hidden;
 }
 
 .hero video {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
 }
 
 .overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(rgba(8, 27, 51, .7), rgba(8, 27, 51, .9));
+    z-index: 2;
 }
 
 .content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -147,6 +245,9 @@ nav {
     padding: 20px;
 }
 
+/* ==========================================================================
+   6. Core Layout Sections (About, Features, Timeline)
+   ========================================================================== */
 .about, .features {
     padding: 60px 10%;
 }
@@ -155,7 +256,6 @@ nav {
     text-align: center;
 }
 
-/* Features/About Section Level Cards */
 .features .card {
     background: rgba(255, 255, 255, .08);
     backdrop-filter: blur(8px);
@@ -170,9 +270,6 @@ nav {
     box-shadow: 0 0 20px #0057ff;
 }
 
-/* ==========================================================================
-   4. Part 3: Interactive How It Works Timeline
-   ========================================================================== */
 .timeline {
     max-width: 900px;
     margin: auto;
@@ -221,7 +318,7 @@ nav {
 }
 
 /* ==========================================================================
-   5. Part 4 & 5: Vehicles Showcase & Videos Section
+   7. Vehicles Showcase & Section Demo Players
    ========================================================================== */
 .vehicles {
     padding: 80px 8%;
@@ -255,7 +352,6 @@ nav {
     margin-bottom: 30px;
 }
 
-/* Videos Components */
 .videos {
     padding: 80px 8%;
     text-align: center;
@@ -290,15 +386,18 @@ nav {
     box-shadow: 0 18px 36px rgba(0, 87, 255, .35);
 }
 
-video {
+/* Content Showcase Inner Video Element Adjustments */
+.video-card video {
     width: 100%;
+    height: 240px;
+    object-fit: cover;
     border-radius: 14px;
     margin: 18px 0;
     background: #000;
 }
 
 /* ==========================================================================
-   6. Part 6 & 7: Impact Statistics & FAQ Dropdown Block
+   8. Impact Statistics & FAQ Panel System
    ========================================================================== */
 .stats {
     padding: 80px 8%;
@@ -339,7 +438,6 @@ video {
     margin-bottom: 12px;
 }
 
-/* FAQ Components */
 .faq {
     max-width: 900px;
     margin: auto;
@@ -383,7 +481,106 @@ video {
 }
 
 /* ==========================================================================
-   7. Part 8: Global Footer & Dynamic Controls
+   9. Fixed Contact Panel Layout Block
+   ========================================================================== */
+.contact {
+    padding: 80px 8%;
+}
+
+.contact h1 {
+    margin-bottom: 40px;
+}
+
+.contact .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    align-items: start;
+}
+
+.contact .card {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    transition: 0.3s ease;
+}
+
+.contact h2 {
+    text-align: left;
+    color: #4DA3FF;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contact input, 
+.contact textarea {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(8, 27, 51, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+}
+
+.contact input:focus, 
+.contact textarea:focus {
+    outline: none;
+    border-color: #0057FF;
+}
+
+.contact textarea {
+    height: 140px;
+    resize: vertical;
+}
+
+.contact button {
+    align-self: flex-start;
+    padding: 14px 35px;
+    background: #0057FF;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.contact button:hover {
+    background: #00C853;
+}
+
+.contact p {
+    font-size: 17px;
+    margin: 18px 0;
+    color: #e2e8f0;
+}
+
+.map {
+    height: 200px;
+    border: 2px dashed rgba(77, 163, 255, 0.4);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+    color: #4DA3FF;
+    background: rgba(77, 163, 255, 0.05);
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   10. Global Layout System Footer
    ========================================================================== */
 .footer {
     background: #061427;
@@ -434,14 +631,9 @@ video {
 }
 
 /* ==========================================================================
-   8. Responsive Media Breakpoints
+   11. Responsive Media Breakpoints
    ========================================================================== */
 @media(max-width: 700px) {
-    .step {
-        flex-direction: column;
-        text-align: center;
-    }
-    .line {
-        margin: 20px auto;
-    }
+    .step { flex-direction: column; text-align: center; }
+    .line { margin: 20px auto; }
 }
