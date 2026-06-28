@@ -179,12 +179,12 @@ transition: all 0.3s ease;
 <div class="card">
 
 <div class="logo">
-<img src="./images/LOGO.png" alt="SAARTHI Logo">
+<img src="./LOGO.png" alt="SAARTHI Logo">
 </div>
 
 <div id="step1">
 
-<h2>🚗 Activate Your Vehicle</h2>
+<h2>🚗 Activate Your Car</h2>
 
 <p>
 Please make sure <b>Telegram</b> is installed and activated on this phone before continuing.
@@ -193,9 +193,7 @@ Please make sure <b>Telegram</b> is installed and activated on this phone before
 <button onclick="next()">
 Continue
 </button>
-<button onclick="window.location.href='index.html'" style="background: rgba(255, 255, 255, 0.1); margin-top: 10px;">
-    🏠 Back to Home
-</button>
+
 </div>
 
 <div id="step2" class="hidden">
@@ -232,39 +230,71 @@ document.getElementById("step2").classList.remove("hidden");
 
 }
 
-async function activate() {
-    const v = document.getElementById("vehicleNo").value.trim().toUpperCase();
-    const c = document.getElementById("activationCode").value.trim();
-    const m = document.getElementById("msg");
+async function activate(){
 
-    if (!v || !c) {
-        m.style.color = "#ef4444";
-        m.innerHTML = "Please enter Vehicle Number and Activation Code.";
-        return;
-    }
+const v=document.getElementById("vehicleNo").value.trim().toUpperCase();
+const c=document.getElementById("activationCode").value.trim();
+const m=document.getElementById("msg");
 
-    m.style.color = "#4DA3FF";
-    m.innerHTML = "Verifying...";
+if(!v || !c){
 
-    try {
-        const r = await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors", // Required for cross-origin if needed
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "activate", vehicleNo: v, activationCode: c })
-        });
+m.style.color="#ef4444"; /* Softened deep red for pristine dark UI presentation */
+m.innerHTML="Please enter Vehicle Number and Activation Code.";
+return;
 
-        // Since we are using no-cors, we can't read the response directly as JSON
-        // If you need the response, remove "mode: 'no-cors'" and ensure your script allows CORS
-        m.style.color = "#00C853";
-        m.innerHTML = "✅ Request sent. Redirecting...";
-        setTimeout(() => { window.location.href = "https://t.me/sg_car_alert_bot?start=" + encodeURIComponent(v); }, 1500);
+}
 
-    } catch (err) {
-        console.log(err);
-        m.style.color = "#ef4444";
-        m.innerHTML = "❌ Unable to contact server.";
-    }
+m.style.color="#4DA3FF";
+m.innerHTML="Verifying...";
+
+const fd=new FormData();
+
+fd.append("action","activate");
+fd.append("vehicleNo",v);
+fd.append("activationCode",c);
+
+try{
+
+const r=await fetch(SCRIPT_URL,{
+method:"POST",
+body:fd
+});
+
+const text=await r.text();
+
+console.log(text);
+
+const j=JSON.parse(text);
+
+if(j.status==="success"){
+
+m.style.color="#00C853";
+m.innerHTML="✅ Activation successful.<br>Redirecting to Telegram...";
+
+setTimeout(function(){
+
+window.location.href="https://t.me/sg_car_alert_bot?start="+encodeURIComponent(v);
+
+},1500);
+
+}
+else{
+
+m.style.color="#ef4444";
+m.innerHTML="❌ Please check your Vehicle Number or Activation Code.";
+
+}
+
+}
+catch(err){
+
+console.log(err);
+
+m.style.color="#ef4444";
+m.innerHTML="❌ Unable to contact server.";
+
+}
+
 }
 
 </script>
