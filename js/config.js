@@ -1,2 +1,2 @@
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbwXVE2qnkBc3aQt5DLtk8X8SJvtXEKRx4kY-k3CoXGcO-hyrWvSCBrPVtRIBY3dYAjG4g/exec";
+"https://script.google.com/macros/s/AKfycbxmaF3F16h7akEf8epAmon0EwonLzIQcGwvN9rAyDBvW_Fu0mWE7lQWE9V2ZFSlizdeyw/exec";
