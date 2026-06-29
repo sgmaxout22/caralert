@@ -237,7 +237,13 @@ input:focus::placeholder {
         <p class="sub">Register your vehicle with SAARTHI.</p>
 
         <label>Vehicle Number</label>
-        <input id="vehicleNo" type="text" placeholder="MH46AB1234">
+<input 
+    id="vehicleNo" 
+    type="text" 
+    placeholder="MH46AB1234" 
+    pattern="[A-Z0-9]+" 
+    oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase()"
+>
 
         <label>Vehicle Model</label>
         <input id="vehiclemodel" type="text" placeholder="Hyundai Verna">
