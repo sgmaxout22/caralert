@@ -473,13 +473,13 @@ function submitAlert(){
       // Grab text directly from the active, displayed layout tags safely
       const finalVehicleNo = document.getElementById("displayVehicleNo").innerText.trim().toUpperCase();
 
-      formData.append("vehicleNo", finalVehicleNo);
-      formData.append("alert", selectedReason);
-      formData.append("message", document.getElementById("message").value.trim());
-      formData.append("latitude", pos.coords.latitude);
-      formData.append("longitude", pos.coords.longitude);
-      formData.append("location", `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
       formData.append("timestamp", new Date().toLocaleString());
+    formData.append("vehicleNo", finalVehicleNo);
+    formData.append("alert", selectedReason);
+    formData.append("message", document.getElementById("message").value.trim());
+    formData.append("latitude", pos.coords.latitude);
+    formData.append("longitude", pos.coords.longitude);
+    formData.append("location", `http://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
 
       fetch(SCRIPT_URL, {
         method: "POST",
