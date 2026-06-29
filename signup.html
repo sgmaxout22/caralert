@@ -304,7 +304,9 @@ function redirectToTelegram() {
 }
 
 function registerVehicle(){
-    const vehicleNo = document.getElementById("vehicleNo").value.trim().toUpperCase();
+    // Use regex to strip spaces, hyphens, and any special characters before processing
+    const rawVehicleNo = document.getElementById("vehicleNo").value.trim();
+    const vehicleNo = rawVehicleNo.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
     const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobileNo = document.getElementById("mobileNo").value.trim();
