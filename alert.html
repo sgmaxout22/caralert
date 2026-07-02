@@ -78,7 +78,8 @@
             formData.append("vehicleNo", document.getElementById("displayVehicleNo").innerText);
             formData.append("alert", selectedReason);
             formData.append("message", document.getElementById("message").value);
-            formData.append("location", `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`);
+            formData.append("location", `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
+            formData.append("timestamp", new Date().toISOString());
 
             fetch(SCRIPT_URL, { method: "POST", body: formData })
                 .then(() => {
