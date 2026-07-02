@@ -386,6 +386,32 @@ function registerVehicle() {
     });
 
 }
+
+// UI Feedback: Show loader and change button style
+    const btn = event.target; // Assumes passing event
+    btn.classList.add("button-clicked");
+    btn.innerText = "Registering..."; // Optional: Change text
+    document.getElementById("loader").style.display = "block";
+
+    // ... (Your fetch logic) ...
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        // ... (Your success logic) ...
+    })
+    .catch(error => {
+        // Reset button if error happens
+        btn.classList.remove("button-clicked");
+        btn.innerText = "Register Vehicle";
+        document.getElementById("loader").style.display = "none";
+        // ...
+    });
+}
+
+	
 </script>
 
 </body>
