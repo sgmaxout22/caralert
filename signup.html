@@ -283,31 +283,22 @@ input:focus::placeholder {
 <script>
 function redirectToTelegram() {
     let storeUrl = "https://telegram.org/";
-
-    // Android
     if (/Android/i.test(navigator.userAgent)) {
         storeUrl = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
-    }
-
-    // iPhone / iPad
-    else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         storeUrl = "https://apps.apple.com/app/telegram-messenger/id686449807";
     }
-
-    // Try opening Telegram app
     window.location.href = "tg://resolve";
-
-    // If Telegram is not installed, open Store
     setTimeout(function () {
         window.location.href = storeUrl;
     }, 1500);
 }
 
-function registerVehicle() {
-
+function registerVehicle(event) {
+    const btn = event.target;
+    
     // Collect data
-    const rawVehicleNo = document.getElementById("vehicleNo").value.trim();
-    const vehicleNo = rawVehicleNo.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+    const vehicleNo = document.getElementById("vehicleNo").value.trim().replace(/[^A-Za-z0-9]/g, '').toUpperCase();
     const vehiclemodel = document.getElementById("vehiclemodel").value.trim();
     const ownerName = document.getElementById("ownerName").value.trim();
     const mobileNo = document.getElementById("mobileNo").value.trim();
@@ -318,21 +309,21 @@ function registerVehicle() {
         alert("Please fill all details.");
         return;
     }
-
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         alert("Please enter a valid email address.");
         return;
     }
-
     if (!/^\d{10}$/.test(mobileNo)) {
         alert("Please enter a valid 10-digit mobile number.");
         return;
     }
 
+    // UI Feedback
+    btn.disabled = true; // Prevents double submission
+    btn.innerText = "Registering...";
+    btn.classList.add("button-clicked");
     document.getElementById("loader").style.display = "block";
 
-    // Create form data
     const formData = new FormData();
     formData.append("action", "register");
     formData.append("vehicleNo", vehicleNo);
@@ -347,71 +338,35 @@ function registerVehicle() {
     })
     .then(response => response.json())
     .then(result => {
-
-        document.getElementById("loader").style.display = "none";
-
         if (!result.success) {
-            alert(result.message);
-            return;
+            throw new Error(result.message || "Registration failed");
         }
 
-        // Registration Successful
+        // Success State
         document.getElementById("formArea").style.display = "none";
         document.getElementById("success").style.display = "block";
 
         let seconds = 5;
         const count = document.getElementById("count");
-
-        const timer = setInterval(function () {
-
+        const timer = setInterval(() => {
             seconds--;
             count.textContent = seconds;
-
             if (seconds <= 0) {
                 clearInterval(timer);
                 redirectToTelegram();
             }
-
         }, 1000);
-
     })
     .catch(error => {
-
-        document.getElementById("loader").style.display = "none";
-
         console.error(error);
-
-        alert("Unable to connect to the server.\nPlease try again later.");
-
-    });
-
-}
-
-// UI Feedback: Show loader and change button style
-    const btn = event.target; // Assumes passing event
-    btn.classList.add("button-clicked");
-    btn.innerText = "Registering..."; // Optional: Change text
-    document.getElementById("loader").style.display = "block";
-
-    // ... (Your fetch logic) ...
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        // ... (Your success logic) ...
-    })
-    .catch(error => {
-        // Reset button if error happens
+        alert("Error: " + error.message);
+        // Reset UI
+        btn.disabled = false;
+        btn.innerText = "📲 Register Vehicle";
         btn.classList.remove("button-clicked");
-        btn.innerText = "Register Vehicle";
         document.getElementById("loader").style.display = "none";
-        // ...
     });
 }
-
-	
 </script>
 
 </body>
