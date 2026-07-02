@@ -677,3 +677,11 @@ nav a {
         transform: translateY(-10px) rotate(45deg);
     }
 }
+
+/* Custom class to force a clicked look */
+.button-clicked {
+    background: #00C853 !important;
+    transform: scale(0.98) !important;
+    box-shadow: 0 0 10px rgba(0, 200, 83, 0.5) !important;
+    cursor: wait;
+}
