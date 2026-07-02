@@ -8,7 +8,7 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
         body { background: #081B33; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
-        .container { width:100%; max-width:480px; position: relative; }
+        .container { width:100%; max-width:480px; }
         .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border:1px solid rgba(255, 255, 255, 0.12); border-radius:24px; padding:30px; color:white; }
         .header { text-align:center; padding-bottom:30px; }
         .car-number { font-size:30px; font-weight:700; color:#fff; }
@@ -48,15 +48,10 @@
         selectedReason = reason;
     }
 
+    // Load Data
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const scanId = urlParams.get('scan');
-        const vno = urlParams.get('vno');
-        const vmodel = urlParams.get('vmodel');
-
-        if(vno) document.getElementById("displayVehicleNo").innerText = vno.toUpperCase();
-        if(vmodel) document.getElementById("displayVehicleModel").innerText = vmodel.toUpperCase();
-
         if(scanId && typeof SCRIPT_URL !== 'undefined') {
             fetch(`${SCRIPT_URL}?scan=${scanId}`)
                 .then(res => res.json())
@@ -69,26 +64,41 @@
 
     function submitAlert() {
         if(!selectedReason) return alert("Please select a reason");
-        if(typeof SCRIPT_URL === 'undefined') return alert("Configuration error: SCRIPT_URL not found.");
+        if(typeof SCRIPT_URL === 'undefined') return alert("Configuration error.");
         
         document.getElementById("loadingOverlay").style.display = "flex";
 
         navigator.geolocation.getCurrentPosition(pos => {
-            const formData = new FormData();
-            formData.append("vehicleNo", document.getElementById("displayVehicleNo").innerText);
-            formData.append("alert", selectedReason);
-            formData.append("message", document.getElementById("message").value);
-            formData.append("location", `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
-            formData.append("timestamp", new Date().toISOString());
+            // Prepare data with 'action' parameter for the router
+            const alertData = new URLSearchParams();
+            alertData.append("action", "trigger_alert");
+            alertData.append("vehicleNo", document.getElementById("displayVehicleNo").innerText);
+            alertData.append("alert", selectedReason);
+            alertData.append("message", document.getElementById("message").value);
+            alertData.append("latitude", pos.coords.latitude);
+            alertData.append("longitude", pos.coords.longitude);
+            alertData.append("location", `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
 
-            fetch(SCRIPT_URL, { method: "POST", body: formData })
-                .then(() => {
-                    document.getElementById("loadingOverlay").style.display = "none";
+            fetch(SCRIPT_URL, { 
+                method: "POST", 
+                body: alertData 
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("loadingOverlay").style.display = "none";
+                if(data.success) {
                     alert("Alert Sent Successfully!");
-                });
+                } else {
+                    alert("Failed to send alert.");
+                }
+            })
+            .catch(err => {
+                document.getElementById("loadingOverlay").style.display = "none";
+                alert("Error connecting to server.");
+            });
         }, () => {
             document.getElementById("loadingOverlay").style.display = "none";
-            alert("Location access required.");
+            alert("Location access required to send alert.");
         });
     }
 </script>
