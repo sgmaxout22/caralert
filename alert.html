@@ -520,6 +520,28 @@ function submitAlert(){
     }
   );
 }
+
+// 1. Fetch details based on Scan ID on page load
+window.onload = function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const scanId = urlParams.get('scan');
+  
+  if(scanId) {
+    fetch(`YOUR_WEB_APP_URL?scan=${scanId}`)
+      .then(res => res.json())
+      .then(data => {
+        if(data.vno) {
+          document.getElementById("displayVehicleNo").innerText = data.vno;
+          document.getElementById("displayVehicleModel").innerText = data.vmodel;
+        }
+      });
+  }
+};
+
+// 2. Fix the location template literal in your current submitAlert function
+// Note: Your current code has a syntax error in the location string:
+formData.append("location", `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`);
+    
 </script>
 
 <!-- Restored Overlay Layout Components -->
